@@ -8,3 +8,6 @@ dist/
 # TinaCMS
 tina/__generated__/
 public/admin/
+
+# IDE / outils locaux (configs personnelles uniquement)
+.claude/settings.local.json
