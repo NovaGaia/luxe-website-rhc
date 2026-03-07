@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.astro/
+.env
+.env.*
+!.env.example
+
+# TinaCMS
+tina/__generated__/
+public/admin/
