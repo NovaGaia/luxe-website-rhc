@@ -40,6 +40,9 @@ pnpm build   # Build complet — verifie types + compilation
 - **Composants MDX** → `src/components/mdx/` (utilises dans TinaCMS)
 - **Jamais de `style=""` inline** : toujours des classes Tailwind
 - **Couleurs** : utiliser les tokens (`bg-primary`, `text-foreground`, etc.) pas les couleurs Tailwind directes
+- **Chemins d'assets** : toujours utiliser `withBase()` (`src/utils/url.ts`) pour tout chemin absolu vers un asset (image, favicon…)
+- **Bouton d'edition** : conditionne avec `!import.meta.env.GITHUB_ACTIONS` (pas `import.meta.env.DEV`)
+- **Docs** : toujours mettre a jour `docs/DEVELOPMENT.md` avant de committer
 - **WCAG** : aria, alt obligatoires, focus visible, ordre DOM logique, contraste 4.5:1 min
 
 ## Architecture cle

@@ -1,5 +1,6 @@
 import { tv } from 'tailwind-variants';
 import Caption from '../ui/Caption';
+import { withBase } from '../../utils/url';
 
 type Position = 'full' | 'left' | 'right';
 type Width = '1/4' | '1/2' | '2/3' | '3/4';
@@ -53,7 +54,7 @@ export default function CustomImage({
 
   const img = (
     <img
-      src={src}
+      src={withBase(src)}
       alt={alt ?? ''}
       width={imgWidth}
       height={imgHeight}

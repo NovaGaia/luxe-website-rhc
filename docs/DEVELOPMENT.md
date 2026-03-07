@@ -30,6 +30,8 @@ Lance simultanément :
 
 ```
 src/
+├── utils/
+│   └── url.ts               # Utilitaire withBase() pour les chemins d'assets
 ├── components/
 │   ├── ui/                  # Composants atomiques réutilisables
 │   │   ├── Button.tsx
@@ -147,6 +149,29 @@ Lance le serveur TinaCMS, build Astro, puis s'arrête. Le résultat est dans `di
 Le déploiement est automatique sur push sur `main` via `.github/workflows/deploy.yml`.
 
 Le `base` est conditionnel : actif uniquement en CI (`GITHUB_ACTIONS=true`).
+
+### Chemins d'assets (withBase)
+
+Tout chemin absolu vers un asset (image, favicon, etc.) doit passer par `withBase()` pour être compatible avec le base path de GitHub Pages :
+
+```ts
+import { withBase } from '../utils/url';
+
+// ✅ Correct
+<img src={withBase('/images/photo.jpg')} />
+<link href={withBase('/favicon.svg')} />
+
+// ❌ Incorrect — chemin cassé sur GitHub Pages
+<img src="/images/photo.jpg" />
+```
+
+`withBase()` laisse les URLs absolutes (`https://...`) et les chemins relatifs inchangés.
+
+### Bouton d'édition
+
+Le bouton "Éditer cette page" s'affiche uniquement hors CI. Il est contrôlé par `!import.meta.env.GITHUB_ACTIONS` (et non `import.meta.env.DEV`, car `tinacms dev` positionne `NODE_ENV=development` même pendant le build de production).
+
+### Domaine custom
 
 Quand un domaine custom est configuré dans GitHub Pages :
 1. Supprimer `base: isCI ? '/luxe-website-rhc' : undefined` dans `astro.config.mjs`
