@@ -18,11 +18,7 @@ Appliquer systematiquement la methode **APEX** pour chaque tache de developpemen
 ### Commandes de verification (eXamine)
 
 ```bash
-# Build complet (verifie types Astro + compilation)
-pnpm build
-
-# Build avec generation des types TinaCMS (local)
-pnpm build:local
+pnpm build   # Build complet — verifie types + compilation
 ```
 
 ---
@@ -31,14 +27,30 @@ pnpm build:local
 
 - **Framework** : Astro 5 (static output)
 - **CMS** : TinaCMS (mode local — pas de TinaCloud)
-- **Styling** : Tailwind CSS 4
+- **Styling** : Tailwind CSS 4 + tailwind-variants
 - **React** : charge uniquement pendant l'edition TinaCMS
 - **Package manager** : pnpm (obligatoire)
 - **Deploiement** : GitHub Pages via GitHub Actions
+- **Accessibilite** : WCAG 2.2 AA minimum sur tout le code
 
-## Conventions
+## Conventions (OBLIGATOIRES)
 
-- Pages = fichiers MDX dans `src/content/pages/`
-- `home.mdx` → route `/` ; `about.mdx` → `/about`
-- Le routing est gere par `src/pages/[...slug].astro`
-- Config GitHub Pages dans `astro.config.mjs` : `site` et `base`
+- **tailwind-variants** (`tv()`) : utiliser des que variants ou classes conditionnelles
+- **Composants atomiques** → `src/components/ui/` (Button, Caption, etc.)
+- **Composants MDX** → `src/components/mdx/` (utilises dans TinaCMS)
+- **Jamais de `style=""` inline** : toujours des classes Tailwind
+- **Couleurs** : utiliser les tokens (`bg-primary`, `text-foreground`, etc.) pas les couleurs Tailwind directes
+- **WCAG** : aria, alt obligatoires, focus visible, ordre DOM logique, contraste 4.5:1 min
+
+## Architecture cle
+
+- Pages = MDX dans `src/content/pages/` — `home.mdx` → `/`, autres → `/{slug}`
+- Routing : `src/pages/[...slug].astro` via client TinaCMS GraphQL
+- SEO global : singleton `src/content/seo/global.json` (collection TinaCMS)
+- Visual editing : `PageContent.tsx` avec `useTina` + `client:load`
+- `pnpm build` = `tinacms dev -c "astro build"` (serveur GraphQL requis)
+- `base` conditionnel dans `astro.config.mjs` : actif uniquement via `GITHUB_ACTIONS`
+
+## Documentation
+
+Voir `docs/DEVELOPMENT.md` pour le guide complet.

@@ -1,43 +1,35 @@
-# Astro Starter Kit: Minimal
+# luxe-website-rhc
 
-```sh
-pnpm create astro@latest -- --template minimal
+Site vitrine statique généré avec Astro, éditable via TinaCMS en local.
+
+## Stack
+
+| Outil | Version | Rôle |
+|---|---|---|
+| [Astro](https://astro.build) | 5 | Framework SSG |
+| [TinaCMS](https://tina.io) | 3 | CMS Git local |
+| [Tailwind CSS](https://tailwindcss.com) | 4 | Styling |
+| [tailwind-variants](https://www.tailwind-variants.org) | 3 | Variants de composants |
+| React | 18 | Rendu des composants éditables |
+| pnpm | — | Package manager (obligatoire) |
+
+## Commandes
+
+```bash
+pnpm install       # Installation des dépendances
+pnpm dev           # Serveur de développement + TinaCMS (localhost:4321)
+pnpm build         # Build de production (GitHub Pages)
+pnpm preview       # Prévisualisation du build
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## Déploiement
 
-## 🚀 Project Structure
+Le site est déployé automatiquement sur **GitHub Pages** à chaque push sur `main` via GitHub Actions.
 
-Inside of your Astro project, you'll see the following folders and files:
+URL : https://novagaia.github.io/luxe-website-rhc
 
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
-```
+> Quand un domaine custom sera configuré dans GitHub Pages, mettre à jour `site` dans `astro.config.mjs` et supprimer le `base` conditionnel.
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+## Documentation
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
-
-Any static assets, like images, can be placed in the `public/` directory.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `pnpm install`             | Installs dependencies                            |
-| `pnpm dev`             | Starts local dev server at `localhost:4321`      |
-| `pnpm build`           | Build your production site to `./dist/`          |
-| `pnpm preview`         | Preview your build locally, before deploying     |
-| `pnpm astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `pnpm astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+- [Guide développeur](./docs/DEVELOPMENT.md)

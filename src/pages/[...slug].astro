@@ -14,11 +14,26 @@ export async function getStaticPaths() {
 }
 
 const { filename } = Astro.props;
-const { data, query, variables } = await client.queries.page({
-  relativePath: `${filename}.mdx`,
-});
+
+const [pageResponse, seoResponse] = await Promise.all([
+  client.queries.page({ relativePath: `${filename}.mdx` }),
+  client.queries.seo({ relativePath: 'global.json' }),
+]);
+
+const { data, query, variables } = pageResponse;
+const globalSeo = seoResponse.data.seo;
+
+const description = data.page.description || globalSeo.defaultDescription || '';
+const ogImage = globalSeo.defaultOgImage || '';
 ---
 
-<Layout title={data.page.title} description={data.page.description ?? ''}>
+<Layout
+  title={data.page.title}
+  description={description}
+  ogImage={ogImage}
+  siteName={globalSeo.siteName}
+  titleTemplate={globalSeo.titleTemplate ?? '%s'}
+  twitterHandle={globalSeo.twitterHandle ?? ''}
+>
   <PageContent data={data} query={query} variables={variables} client:load />
 </Layout>
