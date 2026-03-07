@@ -1,0 +1,45 @@
+---
+import type { ImageMetadata } from 'astro';
+import { getImage } from 'astro:assets';
+
+interface Props {
+  src: ImageMetadata;
+  alt: string;
+  sizes: number[];
+  sizesAttr?: string;
+  class?: string;
+}
+
+const { src, alt, sizes, sizesAttr = '100vw', class: className } = Astro.props;
+
+// Génère les srcsets AVIF et WebP en parallèle
+const [avifEntries, webpEntries] = await Promise.all([
+  Promise.all(
+    sizes.map(async (w) => {
+      const img = await getImage({ src, width: w, format: 'avif' });
+      return `${img.src} ${w}w`;
+    })
+  ),
+  Promise.all(
+    sizes.map(async (w) => {
+      const img = await getImage({ src, width: w, format: 'webp' });
+      return `${img.src} ${w}w`;
+    })
+  ),
+]);
+
+// Fallback : WebP à la plus grande taille
+const fallback = await getImage({ src, width: Math.max(...sizes), format: 'webp' });
+---
+
+<picture>
+  <source type="image/avif" srcset={avifEntries.join(', ')} sizes={sizesAttr} />
+  <source type="image/webp" srcset={webpEntries.join(', ')} sizes={sizesAttr} />
+  <img
+    src={fallback.src}
+    alt={alt}
+    class={className}
+    loading="lazy"
+    decoding="async"
+  />
+</picture>

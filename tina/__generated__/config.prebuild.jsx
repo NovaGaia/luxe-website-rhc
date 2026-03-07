@@ -1,21 +1,18 @@
+// tina/config.ts
 import { defineConfig } from "tinacms";
-
-export default defineConfig({
+var config_default = defineConfig({
   clientId: null,
   token: null,
-
   build: {
     outputFolder: "admin",
-    publicFolder: "public",
+    publicFolder: "public"
   },
-
   media: {
     tina: {
       mediaRoot: "images",
-      publicFolder: "src/assets",
-    },
+      publicFolder: "src/assets"
+    }
   },
-
   schema: {
     collections: [
       {
@@ -27,42 +24,42 @@ export default defineConfig({
           global: true,
           allowedActions: {
             create: false,
-            delete: false,
-          },
+            delete: false
+          }
         },
         match: {
-          include: "global",
+          include: "global"
         },
         fields: [
           {
             type: "string",
             name: "siteName",
             label: "Nom du site",
-            required: true,
+            required: true
           },
           {
             type: "string",
             name: "titleTemplate",
             label: "Template de titre",
-            description: "Utiliser %s pour l'emplacement du titre de la page. Ex : %s | Mon Site",
+            description: "Utiliser %s pour l'emplacement du titre de la page. Ex : %s | Mon Site"
           },
           {
             type: "string",
             name: "defaultDescription",
-            label: "Description par défaut",
-            ui: { component: "textarea" },
+            label: "Description par d\xE9faut",
+            ui: { component: "textarea" }
           },
           {
             type: "image",
             name: "defaultOgImage",
-            label: "Image Open Graph par défaut",
+            label: "Image Open Graph par d\xE9faut"
           },
           {
             type: "string",
             name: "twitterHandle",
-            label: "Handle Twitter/X (optionnel, ex : @monsite)",
-          },
-        ],
+            label: "Handle Twitter/X (optionnel, ex : @monsite)"
+          }
+        ]
       },
       {
         name: "page",
@@ -75,12 +72,8 @@ export default defineConfig({
             return slug === "home" ? "/" : `/${slug}`;
           },
           filename: {
-            slugify: (values) =>
-              values?.title
-                ?.toLowerCase()
-                .replace(/\s+/g, "-")
-                .replace(/[^\w-]/g, "") ?? "",
-          },
+            slugify: (values) => values?.title?.toLowerCase().replace(/\s+/g, "-").replace(/[^\w-]/g, "") ?? ""
+          }
         },
         fields: [
           {
@@ -88,12 +81,12 @@ export default defineConfig({
             name: "title",
             label: "Titre de la page",
             isTitle: true,
-            required: true,
+            required: true
           },
           {
             type: "string",
             name: "description",
-            label: "Description SEO",
+            label: "Description SEO"
           },
           {
             type: "rich-text",
@@ -109,18 +102,18 @@ export default defineConfig({
                     type: "image",
                     name: "src",
                     label: "Image",
-                    required: true,
+                    required: true
                   },
                   {
                     type: "string",
                     name: "alt",
                     label: "Texte alternatif",
-                    required: true,
+                    required: true
                   },
                   {
                     type: "string",
                     name: "caption",
-                    label: "Légende (optionnelle)",
+                    label: "L\xE9gende (optionnelle)"
                   },
                   {
                     type: "string",
@@ -128,9 +121,9 @@ export default defineConfig({
                     label: "Position",
                     options: [
                       { label: "Pleine largeur", value: "full" },
-                      { label: "Flottant à gauche", value: "left" },
-                      { label: "Flottant à droite", value: "right" },
-                    ],
+                      { label: "Flottant \xE0 gauche", value: "left" },
+                      { label: "Flottant \xE0 droite", value: "right" }
+                    ]
                   },
                   {
                     type: "string",
@@ -140,25 +133,25 @@ export default defineConfig({
                       { label: "1/4", value: "1/4" },
                       { label: "1/2", value: "1/2" },
                       { label: "2/3", value: "2/3" },
-                      { label: "3/4", value: "3/4" },
-                    ],
+                      { label: "3/4", value: "3/4" }
+                    ]
                   },
                   {
                     type: "number",
                     name: "imgWidth",
-                    label: "Largeur native (px, optionnel — anti layout shift)",
+                    label: "Largeur native (px, optionnel \u2014 anti layout shift)"
                   },
                   {
                     type: "number",
                     name: "imgHeight",
-                    label: "Hauteur native (px, optionnel — anti layout shift)",
+                    label: "Hauteur native (px, optionnel \u2014 anti layout shift)"
                   },
                   {
                     type: "string",
                     name: "href",
-                    label: "Lien (optionnel)",
-                  },
-                ],
+                    label: "Lien (optionnel)"
+                  }
+                ]
               },
               {
                 name: "TwoColumns",
@@ -167,12 +160,12 @@ export default defineConfig({
                   {
                     type: "rich-text",
                     name: "left",
-                    label: "Colonne gauche",
+                    label: "Colonne gauche"
                   },
                   {
                     type: "rich-text",
                     name: "right",
-                    label: "Colonne droite",
+                    label: "Colonne droite"
                   },
                   {
                     type: "string",
@@ -181,8 +174,8 @@ export default defineConfig({
                     options: [
                       { label: "50% / 50%", value: "1/2-1/2" },
                       { label: "33% / 67%", value: "1/3-2/3" },
-                      { label: "67% / 33%", value: "2/3-1/3" },
-                    ],
+                      { label: "67% / 33%", value: "2/3-1/3" }
+                    ]
                   },
                   {
                     type: "string",
@@ -190,37 +183,37 @@ export default defineConfig({
                     label: "Alignement vertical",
                     options: [
                       { label: "Haut", value: "top" },
-                      { label: "Centré", value: "center" },
-                      { label: "Bas", value: "bottom" },
-                    ],
-                  },
-                ],
+                      { label: "Centr\xE9", value: "center" },
+                      { label: "Bas", value: "bottom" }
+                    ]
+                  }
+                ]
               },
               {
                 name: "CTABlock",
-                label: "Appel à l'action",
+                label: "Appel \xE0 l'action",
                 fields: [
                   {
                     type: "string",
                     name: "title",
-                    label: "Titre (optionnel)",
+                    label: "Titre (optionnel)"
                   },
                   {
                     type: "string",
                     name: "text",
-                    label: "Texte (optionnel)",
+                    label: "Texte (optionnel)"
                   },
                   {
                     type: "string",
                     name: "buttonLabel",
                     label: "Texte du bouton",
-                    required: true,
+                    required: true
                   },
                   {
                     type: "string",
                     name: "buttonHref",
                     label: "URL du bouton",
-                    required: true,
+                    required: true
                   },
                   {
                     type: "string",
@@ -228,10 +221,10 @@ export default defineConfig({
                     label: "Style du bouton",
                     options: [
                       { label: "Primaire (plein)", value: "primary" },
-                      { label: "Secondaire (contour)", value: "secondary" },
-                    ],
-                  },
-                ],
+                      { label: "Secondaire (contour)", value: "secondary" }
+                    ]
+                  }
+                ]
               },
               {
                 name: "Quote",
@@ -242,46 +235,46 @@ export default defineConfig({
                     name: "quote",
                     label: "Citation",
                     required: true,
-                    ui: { component: "textarea" },
+                    ui: { component: "textarea" }
                   },
                   {
                     type: "string",
                     name: "author",
-                    label: "Auteur",
+                    label: "Auteur"
                   },
                   {
                     type: "string",
                     name: "role",
-                    label: "Rôle / Entreprise (optionnel)",
-                  },
-                ],
+                    label: "R\xF4le / Entreprise (optionnel)"
+                  }
+                ]
               },
               {
                 name: "VideoEmbed",
-                label: "Vidéo",
+                label: "Vid\xE9o",
                 fields: [
                   {
                     type: "string",
                     name: "url",
                     label: "URL YouTube ou Vimeo",
-                    required: true,
+                    required: true
                   },
                   {
                     type: "string",
                     name: "title",
-                    label: "Titre de la vidéo (obligatoire pour l'accessibilité)",
-                    required: true,
+                    label: "Titre de la vid\xE9o (obligatoire pour l'accessibilit\xE9)",
+                    required: true
                   },
                   {
                     type: "string",
                     name: "caption",
-                    label: "Légende (optionnelle)",
-                  },
-                ],
+                    label: "L\xE9gende (optionnelle)"
+                  }
+                ]
               },
               {
                 name: "Separator",
-                label: "Séparateur",
+                label: "S\xE9parateur",
                 fields: [
                   {
                     type: "string",
@@ -290,15 +283,18 @@ export default defineConfig({
                     options: [
                       { label: "Ligne", value: "line" },
                       { label: "Points", value: "dots" },
-                      { label: "Espace", value: "space" },
-                    ],
-                  },
-                ],
-              },
-            ],
-          },
-        ],
-      },
-    ],
-  },
+                      { label: "Espace", value: "space" }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
 });
+export {
+  config_default as default
+};

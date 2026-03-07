@@ -1,39 +1,82 @@
 ---
-import { client } from '../../tina/__generated__/client';
-import PageContent from '../components/PageContent';
+import { getCollection, render } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
+import globalSeo from '../content/seo/global.json';
+
+// Composants Astro — chemin de build (zéro React)
+import CustomImageAstro from '../components/mdx/CustomImage.astro';
+import CTABlockAstro from '../components/mdx/CTABlock.astro';
+import QuoteAstro from '../components/mdx/Quote.astro';
+import SeparatorAstro from '../components/mdx/Separator.astro';
+import VideoEmbedAstro from '../components/mdx/VideoEmbed.astro';
+// TwoColumns reste React (reçoit du JSX en prop) mais gère les deux cas
+import TwoColumns from '../components/mdx/TwoColumns';
+
+// Composant React — chemin dev uniquement (useTina + preview temps réel)
+import PageContent from '../components/PageContent';
 
 export async function getStaticPaths() {
-  const pagesResponse = await client.queries.pageConnection();
-  return (
-    pagesResponse.data.pageConnection.edges?.map((edge) => ({
-      params: { slug: edge?.node?._sys.filename === 'home' ? undefined : edge?.node?._sys.filename },
-      props: { filename: edge?.node?._sys.filename },
-    })) ?? []
-  );
+  const pages = await getCollection('pages');
+  return pages.map((entry) => {
+    // En Astro 5, entry.id inclut l'extension (.mdx) — on la retire pour le slug
+    const filename = entry.id.replace(/\.mdx$/, '');
+    return {
+      params: { slug: filename === 'home' ? undefined : filename },
+      props: { entry },
+    };
+  });
 }
 
-const { filename } = Astro.props;
+const { entry } = Astro.props;
+// entry.id = 'home.mdx', 'about.mdx', etc.
+const filename = entry.id.replace(/\.mdx$/, '');
 
-const [pageResponse, seoResponse] = await Promise.all([
-  client.queries.page({ relativePath: `${filename}.mdx` }),
-  client.queries.seo({ relativePath: 'global.json' }),
-]);
-
-const { data, query, variables } = pageResponse;
-const globalSeo = seoResponse.data.seo;
-
-const description = data.page.description || globalSeo.defaultDescription || '';
+const title = entry.data.title;
+const description = entry.data.description || globalSeo.defaultDescription || '';
 const ogImage = globalSeo.defaultOgImage || '';
+
+// Build (astro build) : import.meta.env.PROD = true → rendu Astro, zéro React
+// Dev   (astro dev)   : import.meta.env.PROD = false → React + useTina
+
+let Content: any = null;
+let tinaData: any = null;
+let tinaQuery = '';
+let tinaVariables: any = null;
+
+if (import.meta.env.PROD) {
+  const rendered = await render(entry);
+  Content = rendered.Content;
+} else {
+  const { client } = await import('../../tina/__generated__/client');
+  const pageResponse = await client.queries.page({ relativePath: entry.id });
+  tinaData = pageResponse.data;
+  tinaQuery = pageResponse.query;
+  tinaVariables = pageResponse.variables;
+}
 ---
 
 <Layout
-  title={data.page.title}
+  title={title}
   description={description}
   ogImage={ogImage}
   siteName={globalSeo.siteName}
   titleTemplate={globalSeo.titleTemplate ?? '%s'}
   twitterHandle={globalSeo.twitterHandle ?? ''}
 >
-  <PageContent data={data} query={query} variables={variables} client:load />
+  {import.meta.env.PROD ? (
+    <main id="main-content" class="flow-root">
+      <Content
+        components={{
+          CustomImage: CustomImageAstro,
+          TwoColumns,
+          CTABlock: CTABlockAstro,
+          Quote: QuoteAstro,
+          VideoEmbed: VideoEmbedAstro,
+          Separator: SeparatorAstro,
+        }}
+      />
+    </main>
+  ) : (
+    <PageContent data={tinaData} query={tinaQuery} variables={tinaVariables} client:load />
+  )}
 </Layout>

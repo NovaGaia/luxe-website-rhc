@@ -1,13 +1,14 @@
-import { tv } from 'tailwind-variants';
+import React from 'react';
 import { TinaMarkdown } from 'tinacms/dist/rich-text';
 import type { TinaMarkdownContent } from 'tinacms/dist/rich-text';
+import { tv } from 'tailwind-variants';
 
 type Ratio = '1/2-1/2' | '1/3-2/3' | '2/3-1/3';
 type Align = 'top' | 'center' | 'bottom';
 
 interface Props {
-  left?: TinaMarkdownContent;
-  right?: TinaMarkdownContent;
+  left?: TinaMarkdownContent | React.ReactNode;
+  right?: TinaMarkdownContent | React.ReactNode;
   ratio?: Ratio;
   align?: Align;
 }
@@ -32,11 +33,19 @@ const grid = tv({
   },
 });
 
+// Gère les deux cas : React element (build via content collections)
+// ou TinaCMS AST (dev via useTina + TinaMarkdown)
+function renderContent(content: TinaMarkdownContent | React.ReactNode) {
+  if (!content) return null;
+  if (React.isValidElement(content)) return content;
+  return <TinaMarkdown content={content as TinaMarkdownContent} />;
+}
+
 export default function TwoColumns({ left, right, ratio = '1/2-1/2', align = 'top' }: Props) {
   return (
     <div className={grid({ ratio, align })}>
-      <div>{left && <TinaMarkdown content={left} />}</div>
-      <div>{right && <TinaMarkdown content={right} />}</div>
+      <div>{renderContent(left)}</div>
+      <div>{renderContent(right)}</div>
     </div>
   );
 }

@@ -1,0 +1,25 @@
+---
+type Style = 'line' | 'dots' | 'space';
+
+interface Props {
+  style?: Style;
+}
+
+const { style = 'line' } = Astro.props;
+---
+
+{style === 'line' && (
+  <hr class="my-12 border-t border-current opacity-20" />
+)}
+
+{style === 'dots' && (
+  <div class="my-12 flex justify-center gap-2" role="separator" aria-hidden="true">
+    <span class="block h-1.5 w-1.5 rounded-full bg-current opacity-40" />
+    <span class="block h-1.5 w-1.5 rounded-full bg-current opacity-40" />
+    <span class="block h-1.5 w-1.5 rounded-full bg-current opacity-40" />
+  </div>
+)}
+
+{style === 'space' && (
+  <div class="my-16" role="separator" aria-hidden="true" />
+)}

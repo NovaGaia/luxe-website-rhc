@@ -1,0 +1,51 @@
+---
+import Caption from '../ui/Caption.astro';
+
+interface Props {
+  url?: string;
+  title?: string;
+  caption?: string;
+}
+
+const { url, title, caption } = Astro.props;
+
+if (!url || !title) return;
+
+function getEmbedUrl(rawUrl: string): string | null {
+  try {
+    const u = new URL(rawUrl);
+    if (u.hostname.includes('youtube.com')) {
+      const id = u.searchParams.get('v');
+      return id ? `https://www.youtube.com/embed/${id}` : null;
+    }
+    if (u.hostname === 'youtu.be') {
+      const id = u.pathname.slice(1);
+      return id ? `https://www.youtube.com/embed/${id}` : null;
+    }
+    if (u.hostname.includes('vimeo.com')) {
+      const id = u.pathname.slice(1);
+      return id ? `https://player.vimeo.com/video/${id}` : null;
+    }
+    return null;
+  } catch {
+    return null;
+  }
+}
+
+const embedUrl = getEmbedUrl(url);
+if (!embedUrl) return;
+---
+
+<figure class="my-8">
+  <div class="relative aspect-video w-full overflow-hidden">
+    <iframe
+      src={embedUrl}
+      title={title}
+      loading="lazy"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen
+      class="absolute inset-0 h-full w-full border-0"
+    />
+  </div>
+  {caption && <Caption>{caption}</Caption>}
+</figure>

@@ -1,0 +1,63 @@
+[     247ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:4321/images/GLOBE---1850-2024-MO.png:0
+[   86177ms] [ERROR] WebSocket connection to 'ws://localhost:4321/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:4321/@vite/client:1766
+[  168433ms] [ERROR] WebSocket connection to 'ws://localhost:4321/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:4321/@vite/client:1766
+[  169441ms] [ERROR] WebSocket connection to 'ws://localhost:4321/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:4321/@vite/client:1766
+[  170444ms] [ERROR] WebSocket connection to 'ws://localhost:4321/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:4321/@vite/client:1766
+[  171453ms] [ERROR] WebSocket connection to 'ws://localhost:4321/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:4321/@vite/client:1766
+[  172455ms] [ERROR] WebSocket connection to 'ws://localhost:4321/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:4321/@vite/client:1766
+[  173457ms] [ERROR] WebSocket connection to 'ws://localhost:4321/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:4321/@vite/client:1766
+[  174460ms] [ERROR] WebSocket connection to 'ws://localhost:4321/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:4321/@vite/client:1766
+[  175465ms] [ERROR] WebSocket connection to 'ws://localhost:4321/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:4321/@vite/client:1766
+[  176473ms] [ERROR] WebSocket connection to 'ws://localhost:4321/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:4321/@vite/client:1766
+[  177479ms] [ERROR] WebSocket connection to 'ws://localhost:4321/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:4321/@vite/client:1766
+[  178481ms] [ERROR] WebSocket connection to 'ws://localhost:4321/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:4321/@vite/client:1766
+[  179488ms] [ERROR] WebSocket connection to 'ws://localhost:4321/' failed: Error during WebSocket handshake: Unexpected response code: 200 @ http://localhost:4321/@vite/client:1766
+[  180498ms] [ERROR] WebSocket connection to 'ws://localhost:4321/' failed: Error during WebSocket handshake: Unexpected response code: 200 @ http://localhost:4321/@vite/client:1766
+[  181508ms] [ERROR] WebSocket connection to 'ws://localhost:4321/' failed: Error during WebSocket handshake: Unexpected response code: 200 @ http://localhost:4321/@vite/client:1766
+[  182518ms] [ERROR] WebSocket connection to 'ws://localhost:4321/' failed: Error during WebSocket handshake: Unexpected response code: 200 @ http://localhost:4321/@vite/client:1766
+[  183528ms] [ERROR] WebSocket connection to 'ws://localhost:4321/' failed: Error during WebSocket handshake: Unexpected response code: 200 @ http://localhost:4321/@vite/client:1766
+[  184532ms] [ERROR] WebSocket connection to 'ws://localhost:4321/' failed: Error during WebSocket handshake: Unexpected response code: 200 @ http://localhost:4321/@vite/client:1766
+[  185541ms] [ERROR] WebSocket connection to 'ws://localhost:4321/' failed: Error during WebSocket handshake: Unexpected response code: 200 @ http://localhost:4321/@vite/client:1766
+[  186549ms] [ERROR] WebSocket connection to 'ws://localhost:4321/' failed: Error during WebSocket handshake: Unexpected response code: 200 @ http://localhost:4321/@vite/client:1766
+[  187555ms] [ERROR] WebSocket connection to 'ws://localhost:4321/' failed: Error during WebSocket handshake: Unexpected response code: 200 @ http://localhost:4321/@vite/client:1766
+[  188567ms] [ERROR] WebSocket connection to 'ws://localhost:4321/' failed: Error during WebSocket handshake: Unexpected response code: 200 @ http://localhost:4321/@vite/client:1766
+[  189575ms] [ERROR] WebSocket connection to 'ws://localhost:4321/' failed: Error during WebSocket handshake: Unexpected response code: 200 @ http://localhost:4321/@vite/client:1766
+[  190583ms] [ERROR] WebSocket connection to 'ws://localhost:4321/' failed: Error during WebSocket handshake: Unexpected response code: 200 @ http://localhost:4321/@vite/client:1766
+[  191590ms] [ERROR] WebSocket connection to 'ws://localhost:4321/' failed: Error during WebSocket handshake: Unexpected response code: 200 @ http://localhost:4321/@vite/client:1766
+[  192597ms] [ERROR] WebSocket connection to 'ws://localhost:4321/' failed: Error during WebSocket handshake: Unexpected response code: 200 @ http://localhost:4321/@vite/client:1766
+[  193615ms] [ERROR] WebSocket connection to 'ws://localhost:4321/' failed: Error during WebSocket handshake: Unexpected response code: 200 @ http://localhost:4321/@vite/client:1766
+[  194621ms] [ERROR] WebSocket connection to 'ws://localhost:4321/' failed: Error during WebSocket handshake: Unexpected response code: 200 @ http://localhost:4321/@vite/client:1766
+[  195628ms] [ERROR] WebSocket connection to 'ws://localhost:4321/' failed: Error during WebSocket handshake: Unexpected response code: 200 @ http://localhost:4321/@vite/client:1766
+[  196652ms] [ERROR] WebSocket connection to 'ws://localhost:4321/' failed: Error during WebSocket handshake: Unexpected response code: 200 @ http://localhost:4321/@vite/client:1766
+[  197675ms] [ERROR] WebSocket connection to 'ws://localhost:4321/' failed: Error during WebSocket handshake: Unexpected response code: 200 @ http://localhost:4321/@vite/client:1766
+[  198689ms] [ERROR] WebSocket connection to 'ws://localhost:4321/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:4321/@vite/client:1766
+[  199714ms] [ERROR] WebSocket connection to 'ws://localhost:4321/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:4321/@vite/client:1766
+[  200749ms] [ERROR] WebSocket connection to 'ws://localhost:4321/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:4321/@vite/client:1766
+[  201779ms] [ERROR] WebSocket connection to 'ws://localhost:4321/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:4321/@vite/client:1766
+[  202817ms] [ERROR] WebSocket connection to 'ws://localhost:4321/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:4321/@vite/client:1766
+[  203838ms] [ERROR] WebSocket connection to 'ws://localhost:4321/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:4321/@vite/client:1766
+[  204917ms] [ERROR] WebSocket connection to 'ws://localhost:4321/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:4321/@vite/client:1766
+[ 1044897ms] [ERROR] WebSocket connection to 'ws://localhost:4321/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:4321/@vite/client:1766
+[ 1045899ms] [ERROR] WebSocket connection to 'ws://localhost:4321/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:4321/@vite/client:1766
+[ 1046901ms] [ERROR] WebSocket connection to 'ws://localhost:4321/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:4321/@vite/client:1766
+[ 1047903ms] [ERROR] WebSocket connection to 'ws://localhost:4321/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:4321/@vite/client:1766
+[ 1048905ms] [ERROR] WebSocket connection to 'ws://localhost:4321/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:4321/@vite/client:1766
+[ 1049907ms] [ERROR] WebSocket connection to 'ws://localhost:4321/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:4321/@vite/client:1766
+[ 1050910ms] [ERROR] WebSocket connection to 'ws://localhost:4321/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:4321/@vite/client:1766
+[ 1051916ms] [ERROR] WebSocket connection to 'ws://localhost:4321/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:4321/@vite/client:1766
+[ 1052921ms] [ERROR] WebSocket connection to 'ws://localhost:4321/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:4321/@vite/client:1766
+[ 1053928ms] [ERROR] WebSocket connection to 'ws://localhost:4321/' failed: Error during WebSocket handshake: Unexpected response code: 200 @ http://localhost:4321/@vite/client:1766
+[ 1054939ms] [ERROR] WebSocket connection to 'ws://localhost:4321/' failed: Error during WebSocket handshake: Unexpected response code: 200 @ http://localhost:4321/@vite/client:1766
+[ 1055944ms] [ERROR] WebSocket connection to 'ws://localhost:4321/' failed: Error during WebSocket handshake: Unexpected response code: 200 @ http://localhost:4321/@vite/client:1766
+[ 1056959ms] [ERROR] WebSocket connection to 'ws://localhost:4321/' failed: Error during WebSocket handshake: Unexpected response code: 200 @ http://localhost:4321/@vite/client:1766
+[ 1057981ms] [ERROR] WebSocket connection to 'ws://localhost:4321/' failed: Error during WebSocket handshake: Unexpected response code: 200 @ http://localhost:4321/@vite/client:1766
+[ 1059009ms] [ERROR] WebSocket connection to 'ws://localhost:4321/' failed: Error during WebSocket handshake: Unexpected response code: 200 @ http://localhost:4321/@vite/client:1766
+[ 1060037ms] [ERROR] WebSocket connection to 'ws://localhost:4321/' failed: Error during WebSocket handshake: Unexpected response code: 200 @ http://localhost:4321/@vite/client:1766
+[ 1061070ms] [ERROR] WebSocket connection to 'ws://localhost:4321/' failed: Error during WebSocket handshake: Unexpected response code: 200 @ http://localhost:4321/@vite/client:1766
+[ 1062177ms] [ERROR] WebSocket connection to 'ws://localhost:4321/' failed: Error during WebSocket handshake: Unexpected response code: 200 @ http://localhost:4321/@vite/client:1766
+[ 1063400ms] [ERROR] WebSocket connection to 'ws://localhost:4321/' failed: Error during WebSocket handshake: Unexpected response code: 200 @ http://localhost:4321/@vite/client:1766
+[ 1064902ms] [ERROR] WebSocket connection to 'ws://localhost:4321/' failed: Error during WebSocket handshake: Unexpected response code: 200 @ http://localhost:4321/@vite/client:1766
+[ 1066728ms] [ERROR] WebSocket connection to 'ws://localhost:4321/' failed: Error during WebSocket handshake: Unexpected response code: 200 @ http://localhost:4321/@vite/client:1766
+[ 1068369ms] [ERROR] WebSocket connection to 'ws://localhost:4321/' failed: Error during WebSocket handshake: Unexpected response code: 200 @ http://localhost:4321/@vite/client:1766
+[ 1071013ms] [ERROR] WebSocket connection to 'ws://localhost:4321/' failed: Error during WebSocket handshake: Unexpected response code: 200 @ http://localhost:4321/@vite/client:1766
+[ 1075961ms] [ERROR] WebSocket connection to 'ws://localhost:4321/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:4321/@vite/client:1766

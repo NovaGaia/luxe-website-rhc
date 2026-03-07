@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "tinacms dev -c \"astro dev\"",
-    "build": "tinacms dev -c \"astro build\"",
+    "build": "astro build",
     "preview": "astro preview",
     "astro": "astro"
   },
@@ -27,6 +27,7 @@
     "astro": "^5.17.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "sharp": "^0.34.5",
     "tailwind-variants": "^3.2.2",
     "tailwindcss": "^4.2.1",
     "tinacms": "^3.6.1"

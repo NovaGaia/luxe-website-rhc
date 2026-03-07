@@ -1,0 +1,25 @@
+---
+interface Props {
+  quote?: string;
+  author?: string;
+  role?: string;
+}
+
+const { quote, author, role } = Astro.props;
+
+if (!quote) return;
+---
+
+<figure class="my-8">
+  <blockquote class="border-l-4 border-primary pl-6">
+    <p class="text-xl italic leading-relaxed">{quote}</p>
+  </blockquote>
+  {author && (
+    <figcaption class="mt-4 pl-6 text-sm font-semibold">
+      <cite class="not-italic">{author}</cite>
+      {role && (
+        <span class="ml-1 font-normal text-muted-foreground">— {role}</span>
+      )}
+    </figcaption>
+  )}
+</figure>

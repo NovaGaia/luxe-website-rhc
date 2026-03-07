@@ -14,6 +14,8 @@ interface Props {
   imgWidth?: number;
   imgHeight?: number;
   href?: string;
+  /** Override des tailles srcset — utilisé uniquement au build (CustomImage.astro). Ignoré en dev. */
+  customSizes?: number[];
 }
 
 const figure = tv({
@@ -49,6 +51,9 @@ export default function CustomImage({
   imgWidth,
   imgHeight,
   href,
+  // customSizes est géré uniquement au build par CustomImage.astro
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  customSizes: _customSizes,
 }: Props) {
   if (!src) return null;
 

@@ -1,0 +1,15 @@
+fragment SeoParts on Seo {
+  __typename
+  siteName
+  titleTemplate
+  defaultDescription
+  defaultOgImage
+  twitterHandle
+}
+
+fragment PageParts on Page {
+  __typename
+  title
+  description
+  body
+}

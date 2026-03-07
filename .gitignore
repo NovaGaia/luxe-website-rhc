@@ -6,7 +6,6 @@ dist/
 !.env.example
 
 # TinaCMS
-tina/__generated__/
 public/admin/
 
 # IDE / outils locaux (configs personnelles uniquement)
