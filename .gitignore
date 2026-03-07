@@ -8,3 +8,6 @@ dist/
 # IDE / outils locaux (configs personnelles uniquement)
 .claude/settings.local.json
 .playwright-mcp/
+
+# Généré par tinacms dev — inutile en production
+public/admin/
