@@ -38,6 +38,8 @@ src/
 │   └── image.ts             # responsiveSequence() — génération des srcset
 ├── components/
 │   ├── ui/                  # Composants atomiques réutilisables
+│   │   ├── Box.astro        # Version Astro (build)
+│   │   ├── Box.tsx          # Version React (dev / useTina)
 │   │   ├── Button.astro     # Version Astro (build)
 │   │   ├── Button.tsx       # Version React (dev / useTina)
 │   │   ├── Caption.astro    # Version Astro (build)
@@ -47,6 +49,8 @@ src/
 │   │   ├── CTABlock.tsx     # Version React (dev / useTina)
 │   │   ├── CustomImage.astro# Version Astro avec srcset (build)
 │   │   ├── CustomImage.tsx  # Version React simple (dev / useTina)
+│   │   ├── GlobalCTABlock.astro # Version Astro (build) — lit le singleton via getEntry
+│   │   ├── GlobalCTABlock.tsx   # Version React (dev) — fetch GraphQL localhost:4001
 │   │   ├── Quote.astro      # Version Astro (build)
 │   │   ├── Quote.tsx        # Version React (dev / useTina)
 │   │   ├── Separator.astro  # Version Astro (build)
@@ -58,9 +62,13 @@ src/
 │   ├── Header.astro
 │   ├── Footer.astro
 │   └── PageContent.tsx      # Wrapper React avec useTina (dev uniquement)
+├── config/
+│   └── images.ts            # IMAGE_BREAKPOINTS — tailles srcset générées au build
 ├── content/
 │   ├── pages/               # Pages du site (fichiers MDX)
 │   │   └── home.mdx         # → route /
+│   ├── cta/
+│   │   └── global.json      # CTA global (singleton TinaCMS)
 │   └── seo/
 │       └── global.json      # SEO global (singleton TinaCMS)
 ├── layouts/
@@ -85,7 +93,9 @@ Le fichier `[...slug].astro` utilise deux chemins distincts selon le contexte :
 | **Build** (`astro build`) | `import.meta.env.PROD = true` | Astro content collections + composants `.astro` | srcset WebP, 8 tailles |
 | **Dev** (`tinacms dev -c "astro dev"`) | `import.meta.env.PROD = false` | React + `useTina` + composants `.tsx` | img simple |
 
-Résultat : **zéro React dans le HTML de production**, preview temps réel conservé en édition locale.
+Résultat : **quasiment zéro React dans le HTML de production**, preview temps réel conservé en édition locale.
+
+> **Exception : `TwoColumns`** — ce composant reste React dans les deux chemins (build et dev). Il reçoit du contenu riche (JSX) en prop depuis TinaMarkdown, ce qui est incompatible avec un composant `.astro`.
 
 > **Note importante** : `tinacms dev` définit `NODE_ENV=development`, ce qui rend `import.meta.env.PROD` **toujours faux** pendant cette commande. C'est pourquoi `pnpm build` utilise directement `astro build`, pas `tinacms dev -c "astro build"`.
 
@@ -107,17 +117,58 @@ Résultat : **zéro React dans le HTML de production**, preview temps réel cons
 |---|---|---|
 | **Pages** | MDX | Pages du site |
 | **SEO global** | JSON | Paramètres SEO par défaut du site |
+| **CTA global** | JSON | Appel à l'action insérable dans les pages via le bloc MDX "CTA global" |
+
+#### Champs du singleton CTA global (`src/content/cta/global.json`)
+
+| Champ | Type | Requis | Description |
+|---|---|---|---|
+| `title` | string | non | Titre du bloc |
+| `text` | string | non | Texte descriptif |
+| `buttonLabel` | string | **oui** | Texte du bouton |
+| `buttonEmoji` | string | non | Emoji préfixé au label du bouton |
+| `buttonHref` | string | **oui** | URL cible du bouton |
+| `buttonStyle` | `primary` \| `secondary` | **oui** | Variante visuelle du bouton |
+
+#### Mécanique de `GlobalCTABlock`
+
+Le composant s'affiche sans aucune configuration dans la page — il lit toujours le singleton `cta/global` :
+
+- **Build** (`GlobalCTABlock.astro`) : `getEntry('cta', 'global')` via les Astro content collections
+- **Dev** (`GlobalCTABlock.tsx`) : fetch GraphQL sur `http://localhost:4001/graphql` (serveur TinaCMS local)
+
+Pour mettre à jour le CTA affiché sur tout le site : modifier le singleton dans TinaCMS (`/admin` → **CTA global**).
 
 ### Composants MDX disponibles dans l'éditeur
 
-| Composant | Description |
-|---|---|
-| **Image** | Image avec position (full/left/right) et largeur configurable, srcset auto au build |
-| **Deux colonnes** | Bloc à deux colonnes avec ratio et alignement configurables |
-| **Appel à l'action** | Titre + texte + bouton |
-| **Citation** | Blockquote avec auteur et rôle |
-| **Vidéo** | Embed YouTube ou Vimeo |
-| **Séparateur** | Ligne, points ou espace |
+| Composant | Description | Enveloppé dans `Box` |
+|---|---|---|
+| **Image** | Image avec position (full/left/right) et largeur configurable, srcset auto au build | Non (décoratif) |
+| **Deux colonnes** | Bloc à deux colonnes avec ratio et alignement configurables. Chaque colonne est une `<Box noMargin>` | Oui (colonnes internes) |
+| **Appel à l'action** | Titre + texte + bouton | Oui |
+| **Citation** | Blockquote avec auteur et rôle | Oui |
+| **Vidéo** | Embed YouTube ou Vimeo | Oui |
+| **Séparateur** | Ligne, points ou espace | Non (décoratif) |
+| **CTA global** | Bloc sans configuration — affiche le CTA défini dans le singleton "CTA global" | Oui |
+
+### Formatage inline dans le contenu TinaCMS
+
+TinaCMS ne supporte pas nativement les balises HTML `<sup>` et `<sub>` dans son éditeur riche. Pour contourner cette limitation, deux balises pseudo-HTML sont reconnues et converties au rendu :
+
+| Syntaxe dans TinaCMS | Rendu HTML | Exemple |
+|---|---|---|
+| `[sup]texte[/sup]` | `<sup>texte</sup>` | `m[sup]2[/sup]` → m² |
+| `[sub]texte[/sub]` | `<sub>texte</sub>` | `H[sub]2[/sub]O` → H₂O |
+
+**Implémentation** : `src/utils/tinaComponents.tsx` — composant `text` de TinaMarkdown avec regex `/(sup|sub)/` + backreference.
+
+### Composant TwoColumns — détails
+
+`TwoColumns` est le seul composant MDX qui reste React dans les deux modes (build et dev). Il utilise un `display: grid` avec `align-items: stretch` pour que les deux colonnes aient la même hauteur.
+
+- Chaque colonne est rendue dans une `<Box noMargin>` — la `Box` occupe toute la hauteur disponible de la cellule grid.
+- La prop `align` (`top` | `center` | `bottom`) contrôle l'alignement **du contenu à l'intérieur** de chaque colonne via flexbox.
+- La prop `ratio` (`1/2-1/2` | `1/3-2/3` | `2/3-1/3`) définit les fractions de la grille.
 
 ### Images dans le contenu
 
@@ -179,21 +230,29 @@ Pour mettre à jour les couleurs de la marque, modifier les variables dans `:roo
 
 Les composants atomiques réutilisables sont dans `src/components/ui/`. Chaque composant existe en version `.astro` (build) et `.tsx` (dev/useTina).
 
-```tsx
-// React (dev)
-import Button from '@/components/ui/Button';
-<Button href="/contact" label="Nous contacter" style="primary" />
-```
+| Composant | Description |
+|---|---|
+| **Button** | Lien stylisé, variants `primary` / `secondary` |
+| **Caption** | Légende sous image ou vidéo |
+| **Box** | Conteneur avec bordure `border-border`, `rounded`, `p-8`, `my-8`. Prop `noMargin` pour désactiver `my-8` (usage dans grilles — ex : colonnes de `TwoColumns`). |
 
 ```astro
 // Astro (build)
-import Button from '@/components/ui/Button.astro';
-<Button href="/contact" label="Nous contacter" style="primary" />
+import Box from '@/components/ui/Box.astro';
+<Box>contenu</Box>
+<Box noMargin>contenu sans marge externe</Box>
+```
+
+```tsx
+// React (dev)
+import Box from '@/components/ui/Box';
+<Box>contenu</Box>
+<Box noMargin>contenu sans marge externe</Box>
 ```
 
 ### Conventions
 
-- **`tailwind-variants`** (`tv()`) : obligatoire pour tout composant avec des variantes
+- **`tailwind-variants`** (`tv()`) : usage maximal — obligatoire pour tout composant, même sans variante (utiliser `base`). Ne jamais construire des classes avec concaténation de strings.
 - **Pas de `style=""` inline** : toujours des classes Tailwind
 - **Composants atomiques** → `src/components/ui/`
 - **Composants MDX** → `src/components/mdx/` (deux versions : `.astro` build + `.tsx` dev)
