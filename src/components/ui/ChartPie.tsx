@@ -1,6 +1,7 @@
 import { Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts';
 import Box from '../ui/Box';
 import { CHART_COLORS } from './chartColors';
+import { sharedTooltipProps } from './chartTooltipProps';
 import InsightPopin from '../mdx/InsightPopin';
 
 interface ChartData {
@@ -77,8 +78,9 @@ export default function ChartPie({ title, insight, insightPopinContent, datas, n
               ))}
             </Pie>
             <Tooltip
+              {...sharedTooltipProps}
               formatter={(value: number, name: string) => [
-                `${value} (${((value / total) * 100).toFixed(1)}%)`,
+                `${((value / total) * 100).toFixed(0)}%`,
                 name,
               ]}
             />
