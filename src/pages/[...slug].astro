@@ -9,8 +9,11 @@ import CTABlockAstro from '../components/mdx/CTABlock.astro';
 import QuoteAstro from '../components/mdx/Quote.astro';
 import SeparatorAstro from '../components/mdx/Separator.astro';
 import VideoEmbedAstro from '../components/mdx/VideoEmbed.astro';
-// TwoColumns reste React (reçoit du JSX en prop) mais gère les deux cas
+import GlobalCTABlockAstro from '../components/mdx/GlobalCTABlock.astro';
+// TwoColumns et OneColumn restent React (reçoivent du JSX en prop) mais gèrent les deux cas
 import TwoColumns from '../components/mdx/TwoColumns';
+import OneColumn from '../components/mdx/OneColumn';
+import TwoCharts from '../components/mdx/TwoCharts';
 
 // Composant React — chemin dev uniquement (useTina + preview temps réel)
 import PageContent from '../components/PageContent';
@@ -69,10 +72,13 @@ if (import.meta.env.PROD) {
         components={{
           CustomImage: CustomImageAstro,
           TwoColumns,
+          OneColumn,
+          TwoCharts,
           CTABlock: CTABlockAstro,
           Quote: QuoteAstro,
           VideoEmbed: VideoEmbedAstro,
           Separator: SeparatorAstro,
+          GlobalCTA: GlobalCTABlockAstro,
         }}
       />
     </main>

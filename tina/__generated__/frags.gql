@@ -1,3 +1,13 @@
+fragment CtaParts on Cta {
+  __typename
+  title
+  text
+  buttonLabel
+  buttonEmoji
+  buttonHref
+  buttonStyle
+}
+
 fragment SeoParts on Seo {
   __typename
   siteName

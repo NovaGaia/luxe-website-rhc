@@ -3,29 +3,103 @@ title: Accueil
 description: Bienvenue sur notre site
 ---
 
-# Bienvenue
+# Overview – E-commerce payments in France
 
 Contenu de la page d'accueil.
 
-<CustomImage src="/images/GLOBE---1850-2024-MO.png" alt="stripes" caption="stripes" position="full" width="1/2" imgWidth={3780} imgHeight={2126} />
+<TwoColumns
+  left={<>
+    ## 65%
+    
+    Retailers sell internationally
+  </>}
+  right={<>
+    ## 3\[sup]rd\[/sup]
+    
+    Largest e-commerce market(Europe) H\[sub]2\[/sub]O
+  </>}
+  align="top"
+/>
 
-test d'images
+<TwoCharts
+  leftType="chartPie"
+  leftTitle="Preferred payment methods - Luxury segment"
+  leftInsight="Premium cards dominate high-value purchases"
+  leftInsightPopinContent="Les cartes premium (Visa Infinite, World Elite Mastercard, Centurion Amex) représentent plus de la moitié des transactions luxe en ligne, portées par les avantages (assurances, cashback, services conciergerie)."
+  leftDatas={[
+    { label: "Mobile Wallets", value: 7 },
+    { label: "Bank Transfer", value: 8 },
+    { label: "BNPL", value: 3 },
+    { label: "Paypal", value: 25 },
+    { label: "Credit Card", value: 39 },
+    { label: "Debit Card", value: 16 },
+    { label: "Other", value: 2 }
+  ]}
+  rightType="chartBar"
+  rightTitle="Device breakdown - Luxury purchases"
+  rightInsight="Desktop still preferred for high-value transactions"
+  rightInsightPopinContent="Malgré la montée du mobile dans le retail, les achats luxe restent majoritairement effectués sur desktop, offrant une expérience plus immersive et rassurante pour les montants élevés."
+  rightDatas={[
+    { label: "Desktop", value: 39 },
+    { label: "Mobile", value: 61 }
+  ]}
+/>
 
 <TwoColumns
   left={<>
-    text left
+    ## Regulations Update
     
-    In Lorem enim aliquip velit cupidatat officia nisi ut in quis exercitation est ex reprehenderit excepteur.
+    **OSMP (Observatoire de la Sécurité des Moyens de Paiement)** issued in February 2025 a new regulation enforcing mandatory 3DS for all customer e-commerce transactions. Exemptions will only be granted upon issuing bank decisions, based on data submitted by merchants.
+    
+    **MiCA (Markets in Crypto-Assets)** is a new European regulation in effect since December 2024. It brings more transparency to cryptocurrencies and strengthens oversight of crypto market participants.
+    
+    **PSD3 (Payment Services Directive 3)** is currently under discussion at the European Parliament, with implementation planned for 2026. This regulation aims to harmonize the rules governing payment services, optimize the use of banking APIs, and enhance consumer protection in cases of fraud related to Open Banking. It is expected to promote the development of services such as instant payments.
   </>}
   right={<>
-    text right
+    ## Focus – BNPL & Consumer Trends
+    
+    BNPL represents 5% of e-commerce transactions in 2024.
+    
+    10 to 15% of French e-commerce websites offer BNPL, representing a market of 4.5 billion € per year. In fact, 46% of French luxury consumers seek flexible payment options.
+    
+    More regulations are being put in place by authorities to ensure better customer protection on consumer credit, with the Consumer Credit Directive planned to be implemented in 2026 in France.
+    
+    Merchants increase their conversion rates, value of shopping baskets, and therefore their turnover.
+    
+    This trend is expected to continue in the coming years due to its growing popularity, mostly among Millennials and Gen Z.
   </>}
-  ratio="1/2-1/2"
-  align="center"
+  rightStyle="secondary"
 />
 
-<CTABlock title="cta title" text="Duis ea veniam deserunt amet anim anim aute labore non est adipisicing et sunt irure." buttonLabel="action" buttonHref="https://novagaia.fr" buttonStyle="secondary" />
+<OneColumn
+  content={<>
+    ### Focus – Instant Payments & Luxury E-commerce
+    
+    The European Union has adopted the regulation that will require banks to offer instant payment at the same rate as traditional transfers (often free) by autumn 2025.
+    
+    Including instant payment as an accepted payment method could be a real growth driver for luxury e-commerce merchants for many reasons: better conversion rates, transaction limits higher than traditional payment methods (up to 15,000€ according to the acquirer), reduced fraud rates compared to credit cards, and a smooth user experience.
+  </>}
+/>
+
+<OneColumn
+  content={<>
+    ## AI Focus
+    
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit...
+    
+    Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat...
+    
+    Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+  </>}
+  boxStyle="secondary"
+/>
+
+<GlobalCTA />
 
 <Separator style="dots" />
+
+<CustomImage src="/images/GLOBE---1850-2024-MO.png" alt="stripes" caption="stripes" position="full" width="1/2" imgWidth={3780} imgHeight={2126} />
+
+<CTABlock title="cta title" text="Duis ea veniam deserunt amet anim anim aute labore non est adipisicing et sunt irure." buttonLabel="action" buttonHref="https://novagaia.fr" buttonStyle="secondary" />
 
 <Quote quote="Aliquip do culpa minim deserunt cupidatat nostrud occaecat Lorem qui id consectetur ex." author="renaud" role="Rhapsodies Conseil" />

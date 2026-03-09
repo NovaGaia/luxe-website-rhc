@@ -82,6 +82,8 @@ export type Query = {
   collections: Array<Collection>;
   node: Node;
   document: DocumentNode;
+  cta: Cta;
+  ctaConnection: CtaConnection;
   seo: Seo;
   seoConnection: SeoConnection;
   page: Page;
@@ -107,6 +109,21 @@ export type QueryNodeArgs = {
 export type QueryDocumentArgs = {
   collection?: InputMaybe<Scalars['String']['input']>;
   relativePath?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type QueryCtaArgs = {
+  relativePath?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type QueryCtaConnectionArgs = {
+  before?: InputMaybe<Scalars['String']['input']>;
+  after?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Float']['input']>;
+  last?: InputMaybe<Scalars['Float']['input']>;
+  sort?: InputMaybe<Scalars['String']['input']>;
+  filter?: InputMaybe<CtaFilter>;
 };
 
 
@@ -140,6 +157,7 @@ export type QueryPageConnectionArgs = {
 };
 
 export type DocumentFilter = {
+  cta?: InputMaybe<CtaFilter>;
   seo?: InputMaybe<SeoFilter>;
   page?: InputMaybe<PageFilter>;
 };
@@ -181,7 +199,49 @@ export type CollectionDocumentsArgs = {
   folder?: InputMaybe<Scalars['String']['input']>;
 };
 
-export type DocumentNode = Seo | Page | Folder;
+export type DocumentNode = Cta | Seo | Page | Folder;
+
+export type Cta = Node & Document & {
+  __typename?: 'Cta';
+  title?: Maybe<Scalars['String']['output']>;
+  text?: Maybe<Scalars['String']['output']>;
+  buttonLabel: Scalars['String']['output'];
+  buttonEmoji?: Maybe<Scalars['String']['output']>;
+  buttonHref: Scalars['String']['output'];
+  buttonStyle?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  _sys: SystemInfo;
+  _values: Scalars['JSON']['output'];
+};
+
+export type StringFilter = {
+  startsWith?: InputMaybe<Scalars['String']['input']>;
+  eq?: InputMaybe<Scalars['String']['input']>;
+  exists?: InputMaybe<Scalars['Boolean']['input']>;
+  in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+};
+
+export type CtaFilter = {
+  title?: InputMaybe<StringFilter>;
+  text?: InputMaybe<StringFilter>;
+  buttonLabel?: InputMaybe<StringFilter>;
+  buttonEmoji?: InputMaybe<StringFilter>;
+  buttonHref?: InputMaybe<StringFilter>;
+  buttonStyle?: InputMaybe<StringFilter>;
+};
+
+export type CtaConnectionEdges = {
+  __typename?: 'CtaConnectionEdges';
+  cursor: Scalars['String']['output'];
+  node?: Maybe<Cta>;
+};
+
+export type CtaConnection = Connection & {
+  __typename?: 'CtaConnection';
+  pageInfo: PageInfo;
+  totalCount: Scalars['Float']['output'];
+  edges?: Maybe<Array<Maybe<CtaConnectionEdges>>>;
+};
 
 export type Seo = Node & Document & {
   __typename?: 'Seo';
@@ -193,13 +253,6 @@ export type Seo = Node & Document & {
   id: Scalars['ID']['output'];
   _sys: SystemInfo;
   _values: Scalars['JSON']['output'];
-};
-
-export type StringFilter = {
-  startsWith?: InputMaybe<Scalars['String']['input']>;
-  eq?: InputMaybe<Scalars['String']['input']>;
-  exists?: InputMaybe<Scalars['Boolean']['input']>;
-  in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
 };
 
 export type ImageFilter = {
@@ -272,6 +325,8 @@ export type PageBodyTwoColumnsFilter = {
   right?: InputMaybe<RichTextFilter>;
   ratio?: InputMaybe<StringFilter>;
   align?: InputMaybe<StringFilter>;
+  leftStyle?: InputMaybe<StringFilter>;
+  rightStyle?: InputMaybe<StringFilter>;
 };
 
 export type PageBodyCtaBlockFilter = {
@@ -294,6 +349,41 @@ export type PageBodyVideoEmbedFilter = {
   caption?: InputMaybe<StringFilter>;
 };
 
+export type PageBodyGlobalCtaFilter = {
+  _note?: InputMaybe<StringFilter>;
+};
+
+export type PageBodyOneColumnFilter = {
+  content?: InputMaybe<RichTextFilter>;
+  width?: InputMaybe<StringFilter>;
+  align?: InputMaybe<StringFilter>;
+  boxStyle?: InputMaybe<StringFilter>;
+};
+
+export type PageBodyTwoChartsLeftDatasFilter = {
+  label?: InputMaybe<StringFilter>;
+  value?: InputMaybe<NumberFilter>;
+};
+
+export type PageBodyTwoChartsRightDatasFilter = {
+  label?: InputMaybe<StringFilter>;
+  value?: InputMaybe<NumberFilter>;
+};
+
+export type PageBodyTwoChartsFilter = {
+  ratio?: InputMaybe<StringFilter>;
+  leftType?: InputMaybe<StringFilter>;
+  leftTitle?: InputMaybe<StringFilter>;
+  leftInsight?: InputMaybe<StringFilter>;
+  leftInsightPopinContent?: InputMaybe<StringFilter>;
+  leftDatas?: InputMaybe<PageBodyTwoChartsLeftDatasFilter>;
+  rightType?: InputMaybe<StringFilter>;
+  rightTitle?: InputMaybe<StringFilter>;
+  rightInsight?: InputMaybe<StringFilter>;
+  rightInsightPopinContent?: InputMaybe<StringFilter>;
+  rightDatas?: InputMaybe<PageBodyTwoChartsRightDatasFilter>;
+};
+
 export type PageBodySeparatorFilter = {
   style?: InputMaybe<StringFilter>;
 };
@@ -304,6 +394,9 @@ export type PageBodyFilter = {
   CTABlock?: InputMaybe<PageBodyCtaBlockFilter>;
   Quote?: InputMaybe<PageBodyQuoteFilter>;
   VideoEmbed?: InputMaybe<PageBodyVideoEmbedFilter>;
+  GlobalCTA?: InputMaybe<PageBodyGlobalCtaFilter>;
+  OneColumn?: InputMaybe<PageBodyOneColumnFilter>;
+  TwoCharts?: InputMaybe<PageBodyTwoChartsFilter>;
   Separator?: InputMaybe<PageBodySeparatorFilter>;
 };
 
@@ -333,6 +426,8 @@ export type Mutation = {
   deleteDocument: DocumentNode;
   createDocument: DocumentNode;
   createFolder: DocumentNode;
+  updateCta: Cta;
+  createCta: Cta;
   updateSeo: Seo;
   createSeo: Seo;
   updatePage: Page;
@@ -373,6 +468,18 @@ export type MutationCreateFolderArgs = {
 };
 
 
+export type MutationUpdateCtaArgs = {
+  relativePath: Scalars['String']['input'];
+  params: CtaMutation;
+};
+
+
+export type MutationCreateCtaArgs = {
+  relativePath: Scalars['String']['input'];
+  params: CtaMutation;
+};
+
+
 export type MutationUpdateSeoArgs = {
   relativePath: Scalars['String']['input'];
   params: SeoMutation;
@@ -397,14 +504,25 @@ export type MutationCreatePageArgs = {
 };
 
 export type DocumentUpdateMutation = {
+  cta?: InputMaybe<CtaMutation>;
   seo?: InputMaybe<SeoMutation>;
   page?: InputMaybe<PageMutation>;
   relativePath?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type DocumentMutation = {
+  cta?: InputMaybe<CtaMutation>;
   seo?: InputMaybe<SeoMutation>;
   page?: InputMaybe<PageMutation>;
+};
+
+export type CtaMutation = {
+  title?: InputMaybe<Scalars['String']['input']>;
+  text?: InputMaybe<Scalars['String']['input']>;
+  buttonLabel?: InputMaybe<Scalars['String']['input']>;
+  buttonEmoji?: InputMaybe<Scalars['String']['input']>;
+  buttonHref?: InputMaybe<Scalars['String']['input']>;
+  buttonStyle?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type SeoMutation = {
@@ -421,9 +539,30 @@ export type PageMutation = {
   body?: InputMaybe<Scalars['JSON']['input']>;
 };
 
+export type CtaPartsFragment = { __typename: 'Cta', title?: string | null, text?: string | null, buttonLabel: string, buttonEmoji?: string | null, buttonHref: string, buttonStyle?: string | null };
+
 export type SeoPartsFragment = { __typename: 'Seo', siteName: string, titleTemplate?: string | null, defaultDescription?: string | null, defaultOgImage?: string | null, twitterHandle?: string | null };
 
 export type PagePartsFragment = { __typename: 'Page', title: string, description?: string | null, body?: any | null };
+
+export type CtaQueryVariables = Exact<{
+  relativePath: Scalars['String']['input'];
+}>;
+
+
+export type CtaQuery = { __typename?: 'Query', cta: { __typename: 'Cta', id: string, title?: string | null, text?: string | null, buttonLabel: string, buttonEmoji?: string | null, buttonHref: string, buttonStyle?: string | null, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, hasReferences?: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string } } };
+
+export type CtaConnectionQueryVariables = Exact<{
+  before?: InputMaybe<Scalars['String']['input']>;
+  after?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Float']['input']>;
+  last?: InputMaybe<Scalars['Float']['input']>;
+  sort?: InputMaybe<Scalars['String']['input']>;
+  filter?: InputMaybe<CtaFilter>;
+}>;
+
+
+export type CtaConnectionQuery = { __typename?: 'Query', ctaConnection: { __typename?: 'CtaConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasPreviousPage: boolean, hasNextPage: boolean, startCursor: string, endCursor: string }, edges?: Array<{ __typename?: 'CtaConnectionEdges', cursor: string, node?: { __typename: 'Cta', id: string, title?: string | null, text?: string | null, buttonLabel: string, buttonEmoji?: string | null, buttonHref: string, buttonStyle?: string | null, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, hasReferences?: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string } } | null } | null> | null } };
 
 export type SeoQueryVariables = Exact<{
   relativePath: Scalars['String']['input'];
@@ -463,6 +602,17 @@ export type PageConnectionQueryVariables = Exact<{
 
 export type PageConnectionQuery = { __typename?: 'Query', pageConnection: { __typename?: 'PageConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasPreviousPage: boolean, hasNextPage: boolean, startCursor: string, endCursor: string }, edges?: Array<{ __typename?: 'PageConnectionEdges', cursor: string, node?: { __typename: 'Page', id: string, title: string, description?: string | null, body?: any | null, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, hasReferences?: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string } } | null } | null> | null } };
 
+export const CtaPartsFragmentDoc = gql`
+    fragment CtaParts on Cta {
+  __typename
+  title
+  text
+  buttonLabel
+  buttonEmoji
+  buttonHref
+  buttonStyle
+}
+    `;
 export const SeoPartsFragmentDoc = gql`
     fragment SeoParts on Seo {
   __typename
@@ -481,6 +631,63 @@ export const PagePartsFragmentDoc = gql`
   body
 }
     `;
+export const CtaDocument = gql`
+    query cta($relativePath: String!) {
+  cta(relativePath: $relativePath) {
+    ... on Document {
+      _sys {
+        filename
+        basename
+        hasReferences
+        breadcrumbs
+        path
+        relativePath
+        extension
+      }
+      id
+    }
+    ...CtaParts
+  }
+}
+    ${CtaPartsFragmentDoc}`;
+export const CtaConnectionDocument = gql`
+    query ctaConnection($before: String, $after: String, $first: Float, $last: Float, $sort: String, $filter: CtaFilter) {
+  ctaConnection(
+    before: $before
+    after: $after
+    first: $first
+    last: $last
+    sort: $sort
+    filter: $filter
+  ) {
+    pageInfo {
+      hasPreviousPage
+      hasNextPage
+      startCursor
+      endCursor
+    }
+    totalCount
+    edges {
+      cursor
+      node {
+        ... on Document {
+          _sys {
+            filename
+            basename
+            hasReferences
+            breadcrumbs
+            path
+            relativePath
+            extension
+          }
+          id
+        }
+        ...CtaParts
+      }
+    }
+  }
+}
+    ${CtaPartsFragmentDoc}`;
 export const SeoDocument = gql`
     query seo($relativePath: String!) {
   seo(relativePath: $relativePath) {
@@ -598,7 +805,13 @@ export const PageConnectionDocument = gql`
 export type Requester<C= {}> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R>
   export function getSdk<C>(requester: Requester<C>) {
     return {
-      seo(variables: SeoQueryVariables, options?: C): Promise<{data: SeoQuery, errors?: { message: string, locations: { line: number, column: number }[], path: string[] }[], variables: SeoQueryVariables, query: string}> {
+      cta(variables: CtaQueryVariables, options?: C): Promise<{data: CtaQuery, errors?: { message: string, locations: { line: number, column: number }[], path: string[] }[], variables: CtaQueryVariables, query: string}> {
+        return requester<{data: CtaQuery, errors?: { message: string, locations: { line: number, column: number }[], path: string[] }[], variables: CtaQueryVariables, query: string}, CtaQueryVariables>(CtaDocument, variables, options);
+      },
+    ctaConnection(variables?: CtaConnectionQueryVariables, options?: C): Promise<{data: CtaConnectionQuery, errors?: { message: string, locations: { line: number, column: number }[], path: string[] }[], variables: CtaConnectionQueryVariables, query: string}> {
+        return requester<{data: CtaConnectionQuery, errors?: { message: string, locations: { line: number, column: number }[], path: string[] }[], variables: CtaConnectionQueryVariables, query: string}, CtaConnectionQueryVariables>(CtaConnectionDocument, variables, options);
+      },
+    seo(variables: SeoQueryVariables, options?: C): Promise<{data: SeoQuery, errors?: { message: string, locations: { line: number, column: number }[], path: string[] }[], variables: SeoQueryVariables, query: string}> {
         return requester<{data: SeoQuery, errors?: { message: string, locations: { line: number, column: number }[], path: string[] }[], variables: SeoQueryVariables, query: string}, SeoQueryVariables>(SeoDocument, variables, options);
       },
     seoConnection(variables?: SeoConnectionQueryVariables, options?: C): Promise<{data: SeoConnectionQuery, errors?: { message: string, locations: { line: number, column: number }[], path: string[] }[], variables: SeoConnectionQueryVariables, query: string}> {

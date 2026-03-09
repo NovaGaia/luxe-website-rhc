@@ -243,7 +243,7 @@ Les composants atomiques réutilisables sont dans `src/components/ui/`. Chaque c
 
 | Composant | Description |
 |---|---|
-| **Button** | Lien stylisé, variants `primary` / `secondary` |
+| **Button** | Lien (`href`) ou bouton action (`onClick`), variants `primary` / `secondary` |
 | **Caption** | Légende sous image ou vidéo |
 | **Box** | Conteneur avec bordure `border-border`, `rounded`, `p-8`, `h-full`, `my-8`. Prop `noMargin` pour désactiver `my-8` (usage dans grilles). Prop `variant` (`default` \| `secondary`) pour appliquer un fond coloré. |
 
@@ -386,7 +386,7 @@ Le champ `"type"` vaut `"chartPie"` ou `"chartBar"`. Géré par `src/components/
 
 ### Palette de couleurs
 
-Définie dans `src/components/mdx/chartColors.ts` — 10 couleurs harmonieuses attribuées par index cyclique.
+Définie dans `src/components/ui/chartColors.ts` — 10 couleurs harmonieuses attribuées par index cyclique.
 
 ### Accessibilité
 

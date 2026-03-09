@@ -1,3 +1,4 @@
+import Box from '../ui/Box';
 import Caption from '../ui/Caption';
 
 interface Props {
@@ -39,7 +40,8 @@ export default function VideoEmbed({ url, title, caption }: Props) {
   if (!embedUrl) return null;
 
   return (
-    <figure className="my-8">
+    <Box>
+    <figure>
       <div className="relative aspect-video w-full overflow-hidden">
         <iframe
           src={embedUrl}
@@ -52,5 +54,6 @@ export default function VideoEmbed({ url, title, caption }: Props) {
       </div>
       {caption && <Caption>{caption}</Caption>}
     </figure>
+    </Box>
   );
 }

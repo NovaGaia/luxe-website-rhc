@@ -19,4 +19,16 @@ const seo = defineCollection({
   }),
 });
 
-export const collections = { pages, seo };
+const cta = defineCollection({
+  type: 'data',
+  schema: z.object({
+    title: z.string().optional(),
+    text: z.string().optional(),
+    buttonLabel: z.string(),
+    buttonEmoji: z.string().optional(),
+    buttonHref: z.string(),
+    buttonStyle: z.enum(['primary', 'secondary']).optional(),
+  }),
+});
+
+export const collections = { pages, seo, cta };

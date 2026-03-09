@@ -1,3 +1,5 @@
+import Box from '../ui/Box';
+
 interface Props {
   quote?: string;
   author?: string;
@@ -8,7 +10,8 @@ export default function Quote({ quote, author, role }: Props) {
   if (!quote) return null;
 
   return (
-    <figure className="my-8">
+    <Box>
+    <figure>
       <blockquote className="border-l-4 border-primary pl-6">
         <p className="text-xl italic leading-relaxed">{quote}</p>
       </blockquote>
@@ -21,5 +24,6 @@ export default function Quote({ quote, author, role }: Props) {
         </figcaption>
       )}
     </figure>
+    </Box>
   );
 }

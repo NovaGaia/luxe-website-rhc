@@ -1,0 +1,19 @@
+---
+import { getEntry } from 'astro:content';
+import Box from '../ui/Box.astro';
+import Button from '../ui/Button.astro';
+
+const entry = await getEntry('cta', 'global');
+if (!entry) return;
+
+const { title, text, buttonLabel, buttonEmoji, buttonHref, buttonStyle = 'primary' } = entry.data;
+const label = buttonEmoji ? `${buttonEmoji} ${buttonLabel}` : buttonLabel;
+---
+
+<Box>
+  <div aria-label={title ?? "Appel à l'action"} class="text-center">
+    {title && <h2 class="mb-4 text-2xl font-bold">{title}</h2>}
+    {text && <p class="mb-6 text-muted-foreground">{text}</p>}
+    <Button href={buttonHref} label={label} style={buttonStyle} />
+  </div>
+</Box>

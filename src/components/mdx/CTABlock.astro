@@ -1,4 +1,5 @@
 ---
+import Box from '../ui/Box.astro';
 import Button from '../ui/Button.astro';
 
 type ButtonStyle = 'primary' | 'secondary';
@@ -11,13 +12,21 @@ interface Props {
   buttonStyle?: ButtonStyle;
 }
 
-const { title, text, buttonLabel, buttonHref, buttonStyle = 'primary' } = Astro.props;
+const {
+  title,
+  text,
+  buttonLabel,
+  buttonHref,
+  buttonStyle = 'primary',
+} = Astro.props;
 
 if (!buttonHref || !buttonLabel) return;
 ---
 
-<div class="my-8 p-8 text-center">
-  {title && <h2 class="mb-4 text-2xl font-bold">{title}</h2>}
-  {text && <p class="mb-6 text-muted-foreground">{text}</p>}
-  <Button href={buttonHref} label={buttonLabel} style={buttonStyle} />
-</div>
+<Box>
+  <div aria-label={title ?? "Appel à l'action"} class='text-center'>
+    {title && <h2 class='mb-4 text-2xl font-bold'>{title}</h2>}
+    {text && <p class='mb-6 text-muted-foreground'>{text}</p>}
+    <Button href={buttonHref} label={buttonLabel} style={buttonStyle} />
+  </div>
+</Box>

@@ -16,6 +16,61 @@ var config_default = defineConfig({
   schema: {
     collections: [
       {
+        name: "cta",
+        label: "CTA global",
+        path: "src/content/cta",
+        format: "json",
+        ui: {
+          global: true,
+          allowedActions: {
+            create: false,
+            delete: false
+          }
+        },
+        match: {
+          include: "global"
+        },
+        fields: [
+          {
+            type: "string",
+            name: "title",
+            label: "Titre"
+          },
+          {
+            type: "string",
+            name: "text",
+            label: "Texte",
+            ui: { component: "textarea" }
+          },
+          {
+            type: "string",
+            name: "buttonLabel",
+            label: "Texte du bouton",
+            required: true
+          },
+          {
+            type: "string",
+            name: "buttonEmoji",
+            label: "Emoji du bouton (optionnel, affich\xE9 avant le texte)"
+          },
+          {
+            type: "string",
+            name: "buttonHref",
+            label: "URL du bouton",
+            required: true
+          },
+          {
+            type: "string",
+            name: "buttonStyle",
+            label: "Style du bouton",
+            options: [
+              { label: "Primaire (plein)", value: "primary" },
+              { label: "Secondaire (contour)", value: "secondary" }
+            ]
+          }
+        ]
+      },
+      {
         name: "seo",
         label: "SEO global",
         path: "src/content/seo",
@@ -186,6 +241,26 @@ var config_default = defineConfig({
                       { label: "Centr\xE9", value: "center" },
                       { label: "Bas", value: "bottom" }
                     ]
+                  },
+                  {
+                    type: "string",
+                    name: "leftStyle",
+                    label: "Style colonne gauche",
+                    options: [
+                      { label: "Par d\xE9faut", value: "default" },
+                      { label: "Secondaire", value: "secondary" }
+                    ],
+                    ui: { defaultValue: "default" }
+                  },
+                  {
+                    type: "string",
+                    name: "rightStyle",
+                    label: "Style colonne droite",
+                    options: [
+                      { label: "Par d\xE9faut", value: "default" },
+                      { label: "Secondaire", value: "secondary" }
+                    ],
+                    ui: { defaultValue: "default" }
                   }
                 ]
               },
@@ -269,6 +344,157 @@ var config_default = defineConfig({
                     type: "string",
                     name: "caption",
                     label: "L\xE9gende (optionnelle)"
+                  }
+                ]
+              },
+              {
+                name: "GlobalCTA",
+                label: "CTA global",
+                fields: [
+                  {
+                    // Champ factice — les données viennent du singleton CTA global
+                    type: "string",
+                    name: "_note",
+                    label: "Note",
+                    ui: {
+                      component: () => null
+                    }
+                  }
+                ]
+              },
+              {
+                name: "OneColumn",
+                label: "Une colonne",
+                fields: [
+                  {
+                    type: "rich-text",
+                    name: "content",
+                    label: "Contenu"
+                  },
+                  {
+                    type: "string",
+                    name: "width",
+                    label: "Largeur",
+                    options: [
+                      { label: "Pleine largeur", value: "full" },
+                      { label: "3/4", value: "3/4" },
+                      { label: "2/3", value: "2/3" },
+                      { label: "1/2", value: "1/2" }
+                    ],
+                    ui: { defaultValue: "full" }
+                  },
+                  {
+                    type: "string",
+                    name: "align",
+                    label: "Alignement",
+                    options: [
+                      { label: "Centr\xE9", value: "center" },
+                      { label: "Gauche", value: "left" }
+                    ],
+                    ui: { defaultValue: "center" }
+                  },
+                  {
+                    type: "string",
+                    name: "boxStyle",
+                    label: "Style de la bo\xEEte",
+                    options: [
+                      { label: "Par d\xE9faut", value: "default" },
+                      { label: "Secondaire", value: "secondary" }
+                    ],
+                    ui: { defaultValue: "default" }
+                  }
+                ]
+              },
+              {
+                name: "TwoCharts",
+                label: "Deux graphiques c\xF4te \xE0 c\xF4te",
+                fields: [
+                  {
+                    type: "string",
+                    name: "ratio",
+                    label: "Ratio des colonnes",
+                    options: [
+                      { label: "50% / 50%", value: "1/2-1/2" },
+                      { label: "33% / 67%", value: "1/3-2/3" },
+                      { label: "67% / 33%", value: "2/3-1/3" }
+                    ],
+                    ui: { defaultValue: "1/2-1/2" }
+                  },
+                  {
+                    type: "string",
+                    name: "leftType",
+                    label: "Type graphique gauche",
+                    options: [
+                      { label: "Camembert", value: "chartPie" },
+                      { label: "Barres horizontales", value: "chartBar" }
+                    ],
+                    ui: { defaultValue: "chartPie" }
+                  },
+                  {
+                    type: "string",
+                    name: "leftTitle",
+                    label: "Titre gauche",
+                    required: true
+                  },
+                  {
+                    type: "string",
+                    name: "leftInsight",
+                    label: "Insight gauche",
+                    required: true
+                  },
+                  {
+                    type: "string",
+                    name: "leftInsightPopinContent",
+                    label: "Insight d\xE9tail gauche (optionnel)",
+                    ui: { component: "textarea" }
+                  },
+                  {
+                    type: "object",
+                    name: "leftDatas",
+                    label: "Donn\xE9es gauche",
+                    list: true,
+                    fields: [
+                      { type: "string", name: "label", label: "Label", required: true },
+                      { type: "number", name: "value", label: "Valeur", required: true }
+                    ]
+                  },
+                  {
+                    type: "string",
+                    name: "rightType",
+                    label: "Type graphique droit",
+                    options: [
+                      { label: "Camembert", value: "chartPie" },
+                      { label: "Barres horizontales", value: "chartBar" }
+                    ],
+                    ui: { defaultValue: "chartBar" }
+                  },
+                  {
+                    type: "string",
+                    name: "rightTitle",
+                    label: "Titre droit",
+                    required: true
+                  },
+                  {
+                    type: "string",
+                    name: "rightInsight",
+                    label: "Insight droit",
+                    required: true
+                  },
+                  {
+                    type: "string",
+                    name: "rightInsightPopinContent",
+                    label: "Insight d\xE9tail droit (optionnel)",
+                    ui: { component: "textarea" }
+                  },
+                  {
+                    type: "object",
+                    name: "rightDatas",
+                    label: "Donn\xE9es droites",
+                    list: true,
+                    fields: [
+                      { type: "string", name: "label", label: "Label", required: true },
+                      { type: "number", name: "value", label: "Valeur", required: true }
+                    ]
                   }
                 ]
               },

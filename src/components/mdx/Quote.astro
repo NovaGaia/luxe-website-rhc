@@ -1,4 +1,6 @@
 ---
+import Box from '../ui/Box.astro';
+
 interface Props {
   quote?: string;
   author?: string;
@@ -10,7 +12,8 @@ const { quote, author, role } = Astro.props;
 if (!quote) return;
 ---
 
-<figure class="my-8">
+<Box>
+<figure>
   <blockquote class="border-l-4 border-primary pl-6">
     <p class="text-xl italic leading-relaxed">{quote}</p>
   </blockquote>
@@ -23,3 +26,4 @@ if (!quote) return;
     </figcaption>
   )}
 </figure>
+</Box>

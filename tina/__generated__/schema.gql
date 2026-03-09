@@ -54,6 +54,8 @@ type Query {
   collections: [Collection!]!
   node(id: String): Node!
   document(collection: String, relativePath: String): DocumentNode!
+  cta(relativePath: String): Cta!
+  ctaConnection(before: String, after: String, first: Float, last: Float, sort: String, filter: CtaFilter): CtaConnection!
   seo(relativePath: String): Seo!
   seoConnection(before: String, after: String, first: Float, last: Float, sort: String, filter: SeoFilter): SeoConnection!
   page(relativePath: String): Page!
@@ -61,6 +63,7 @@ type Query {
 }
 
 input DocumentFilter {
+  cta: CtaFilter
   seo: SeoFilter
   page: PageFilter
 }
@@ -88,14 +91,15 @@ type Collection {
   documents(before: String, after: String, first: Float, last: Float, sort: String, filter: DocumentFilter, folder: String): DocumentConnection!
 }
 
-union DocumentNode = Seo | Page | Folder
+union DocumentNode = Cta | Seo | Page | Folder
 
-type Seo implements Node & Document {
-  siteName: String!
-  titleTemplate: String
-  defaultDescription: String
-  defaultOgImage: String
-  twitterHandle: String
+type Cta implements Node & Document {
+  title: String
+  text: String
+  buttonLabel: String!
+  buttonEmoji: String
+  buttonHref: String!
+  buttonStyle: String
   id: ID!
   _sys: SystemInfo!
   _values: JSON!
@@ -106,6 +110,37 @@ input StringFilter {
   eq: String
   exists: Boolean
   in: [String]
+}
+
+input CtaFilter {
+  title: StringFilter
+  text: StringFilter
+  buttonLabel: StringFilter
+  buttonEmoji: StringFilter
+  buttonHref: StringFilter
+  buttonStyle: StringFilter
+}
+
+type CtaConnectionEdges {
+  cursor: String!
+  node: Cta
+}
+
+type CtaConnection implements Connection {
+  pageInfo: PageInfo!
+  totalCount: Float!
+  edges: [CtaConnectionEdges]
+}
+
+type Seo implements Node & Document {
+  siteName: String!
+  titleTemplate: String
+  defaultDescription: String
+  defaultOgImage: String
+  twitterHandle: String
+  id: ID!
+  _sys: SystemInfo!
+  _values: JSON!
 }
 
 input ImageFilter {
@@ -175,6 +210,8 @@ input PageBodyTwoColumnsFilter {
   right: RichTextFilter
   ratio: StringFilter
   align: StringFilter
+  leftStyle: StringFilter
+  rightStyle: StringFilter
 }
 
 input PageBodyCTABlockFilter {
@@ -197,6 +234,41 @@ input PageBodyVideoEmbedFilter {
   caption: StringFilter
 }
 
+input PageBodyGlobalCTAFilter {
+  _note: StringFilter
+}
+
+input PageBodyOneColumnFilter {
+  content: RichTextFilter
+  width: StringFilter
+  align: StringFilter
+  boxStyle: StringFilter
+}
+
+input PageBodyTwoChartsLeftDatasFilter {
+  label: StringFilter
+  value: NumberFilter
+}
+
+input PageBodyTwoChartsRightDatasFilter {
+  label: StringFilter
+  value: NumberFilter
+}
+
+input PageBodyTwoChartsFilter {
+  ratio: StringFilter
+  leftType: StringFilter
+  leftTitle: StringFilter
+  leftInsight: StringFilter
+  leftInsightPopinContent: StringFilter
+  leftDatas: PageBodyTwoChartsLeftDatasFilter
+  rightType: StringFilter
+  rightTitle: StringFilter
+  rightInsight: StringFilter
+  rightInsightPopinContent: StringFilter
+  rightDatas: PageBodyTwoChartsRightDatasFilter
+}
+
 input PageBodySeparatorFilter {
   style: StringFilter
 }
@@ -207,6 +279,9 @@ input PageBodyFilter {
   CTABlock: PageBodyCTABlockFilter
   Quote: PageBodyQuoteFilter
   VideoEmbed: PageBodyVideoEmbedFilter
+  GlobalCTA: PageBodyGlobalCTAFilter
+  OneColumn: PageBodyOneColumnFilter
+  TwoCharts: PageBodyTwoChartsFilter
   Separator: PageBodySeparatorFilter
 }
 
@@ -233,6 +308,8 @@ type Mutation {
   deleteDocument(collection: String, relativePath: String!): DocumentNode!
   createDocument(collection: String, relativePath: String!, params: DocumentMutation!): DocumentNode!
   createFolder(collection: String, relativePath: String!): DocumentNode!
+  updateCta(relativePath: String!, params: CtaMutation!): Cta!
+  createCta(relativePath: String!, params: CtaMutation!): Cta!
   updateSeo(relativePath: String!, params: SeoMutation!): Seo!
   createSeo(relativePath: String!, params: SeoMutation!): Seo!
   updatePage(relativePath: String!, params: PageMutation!): Page!
@@ -240,14 +317,25 @@ type Mutation {
 }
 
 input DocumentUpdateMutation {
+  cta: CtaMutation
   seo: SeoMutation
   page: PageMutation
   relativePath: String
 }
 
 input DocumentMutation {
+  cta: CtaMutation
   seo: SeoMutation
   page: PageMutation
+}
+
+input CtaMutation {
+  title: String
+  text: String
+  buttonLabel: String
+  buttonEmoji: String
+  buttonHref: String
+  buttonStyle: String
 }
 
 input SeoMutation {
