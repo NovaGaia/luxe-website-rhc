@@ -57,7 +57,7 @@ export default function ChartBar({ title, insight, insightPopinContent, datas, n
               axisLine={false}
             />
             <Tooltip
-              formatter={(value: number) => [`${value}%`, '']}
+              formatter={(value) => [typeof value === 'number' ? `${value}%` : '', '']}
               cursor={{ fill: 'transparent' }}
             />
             <Bar dataKey="value" radius={[0, 4, 4, 0]} barSize={barHeight}>
@@ -70,7 +70,7 @@ export default function ChartBar({ title, insight, insightPopinContent, datas, n
               <LabelList
                 dataKey="value"
                 position="right"
-                formatter={(v: number) => `${v}%`}
+                formatter={(v: unknown) => (typeof v === 'number' ? `${v}%` : '')}
                 style={{ fontSize: 13, fontWeight: 600, fill: 'currentColor' }}
                 aria-hidden="true"
               />
