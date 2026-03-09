@@ -1,0 +1,32 @@
+---
+import { tv } from 'tailwind-variants';
+
+interface Props {
+  noMargin?: boolean;
+  variant?: 'default' | 'secondary';
+}
+
+const { noMargin = false, variant = 'default' } = Astro.props;
+
+const box = tv({
+  base: 'h-full overflow-hidden rounded border border-border p-8',
+  variants: {
+    noMargin: {
+      false: 'my-8',
+      true: '',
+    },
+    variant: {
+      default: '',
+      secondary: 'bg-secondary text-secondary-foreground',
+    },
+  },
+  defaultVariants: {
+    noMargin: false,
+    variant: 'default',
+  },
+});
+---
+
+<div class={box({ noMargin, variant })}>
+  <slot />
+</div>

@@ -55,6 +55,7 @@ src/
 │   │   ├── Quote.tsx        # Version React (dev / useTina)
 │   │   ├── Separator.astro  # Version Astro (build)
 │   │   ├── Separator.tsx    # Version React (dev / useTina)
+│   │   ├── OneColumn.tsx    # React uniquement (reçoit du JSX en prop, gère les deux modes)
 │   │   ├── TwoColumns.tsx   # React uniquement (reçoit du JSX en prop, gère les deux modes)
 │   │   ├── VideoEmbed.astro # Version Astro (build)
 │   │   └── VideoEmbed.tsx   # Version React (dev / useTina)
@@ -95,7 +96,7 @@ Le fichier `[...slug].astro` utilise deux chemins distincts selon le contexte :
 
 Résultat : **quasiment zéro React dans le HTML de production**, preview temps réel conservé en édition locale.
 
-> **Exception : `TwoColumns`** — ce composant reste React dans les deux chemins (build et dev). Il reçoit du contenu riche (JSX) en prop depuis TinaMarkdown, ce qui est incompatible avec un composant `.astro`.
+> **Exception : `TwoColumns` et `OneColumn`** — ces composants restent React dans les deux chemins (build et dev). Ils reçoivent du contenu riche (JSX) en prop depuis TinaMarkdown, ce qui est incompatible avec un composant `.astro`.
 
 > **Note importante** : `tinacms dev` définit `NODE_ENV=development`, ce qui rend `import.meta.env.PROD` **toujours faux** pendant cette commande. C'est pourquoi `pnpm build` utilise directement `astro build`, pas `tinacms dev -c "astro build"`.
 
@@ -162,13 +163,23 @@ TinaCMS ne supporte pas nativement les balises HTML `<sup>` et `<sub>` dans son 
 
 **Implémentation** : `src/utils/tinaComponents.tsx` — composant `text` de TinaMarkdown avec regex `/(sup|sub)/` + backreference.
 
+### Composant OneColumn — détails
+
+`OneColumn` est un bloc React-only (comme `TwoColumns`) qui affiche du contenu rich-text dans une `<Box>`, avec contrôle de la largeur et de l'alignement.
+
+- La prop `width` (`full` | `3/4` | `2/3` | `1/2`) contrôle la largeur max via `max-w-[...]`.
+- La prop `align` (`center` | `left`) positionne la colonne horizontalement (`mx-auto` ou `mr-auto`).
+- La prop `boxStyle` (`default` | `secondary`) contrôle le variant visuel de la `<Box>` (voir section Box ci-dessous).
+- Le contenu est rendu dans une `<Box noMargin variant={boxStyle}>`.
+
 ### Composant TwoColumns — détails
 
-`TwoColumns` est le seul composant MDX qui reste React dans les deux modes (build et dev). Il utilise un `display: grid` avec `align-items: stretch` pour que les deux colonnes aient la même hauteur.
+`TwoColumns` est un composant MDX qui reste React dans les deux modes (build et dev). Il utilise un `display: grid` avec `align-items: stretch` pour que les deux colonnes aient la même hauteur.
 
 - Chaque colonne est rendue dans une `<Box noMargin>` — la `Box` occupe toute la hauteur disponible de la cellule grid.
 - La prop `align` (`top` | `center` | `bottom`) contrôle l'alignement **du contenu à l'intérieur** de chaque colonne via flexbox.
 - La prop `ratio` (`1/2-1/2` | `1/3-2/3` | `2/3-1/3`) définit les fractions de la grille.
+- Les props `leftStyle` et `rightStyle` (`default` | `secondary`) contrôlent le variant visuel de chaque colonne (voir section Box ci-dessous).
 
 ### Images dans le contenu
 
@@ -234,13 +245,14 @@ Les composants atomiques réutilisables sont dans `src/components/ui/`. Chaque c
 |---|---|
 | **Button** | Lien stylisé, variants `primary` / `secondary` |
 | **Caption** | Légende sous image ou vidéo |
-| **Box** | Conteneur avec bordure `border-border`, `rounded`, `p-8`, `my-8`. Prop `noMargin` pour désactiver `my-8` (usage dans grilles — ex : colonnes de `TwoColumns`). |
+| **Box** | Conteneur avec bordure `border-border`, `rounded`, `p-8`, `h-full`, `my-8`. Prop `noMargin` pour désactiver `my-8` (usage dans grilles). Prop `variant` (`default` \| `secondary`) pour appliquer un fond coloré. |
 
 ```astro
 // Astro (build)
 import Box from '@/components/ui/Box.astro';
 <Box>contenu</Box>
 <Box noMargin>contenu sans marge externe</Box>
+<Box variant="secondary">fond bg-secondary + text-secondary-foreground</Box>
 ```
 
 ```tsx
@@ -248,6 +260,7 @@ import Box from '@/components/ui/Box.astro';
 import Box from '@/components/ui/Box';
 <Box>contenu</Box>
 <Box noMargin>contenu sans marge externe</Box>
+<Box variant="secondary">fond bg-secondary + text-secondary-foreground</Box>
 ```
 
 ### Conventions
@@ -297,6 +310,91 @@ Affiché uniquement hors CI via `!import.meta.env.GITHUB_ACTIONS`.
 Quand un domaine custom est configuré dans GitHub Pages :
 1. Supprimer `base: isCI ? '/luxe-website-rhc' : undefined` dans `astro.config.mjs`
 2. Mettre à jour `site` avec le vrai domaine
+
+---
+
+## Composants Chart (graphiques)
+
+Les graphiques sont des composants React (`ChartPie`, `ChartBar`) utilisables de deux façons selon le contexte.
+
+### Types disponibles
+
+| Type | Composant | Description |
+|---|---|---|
+| `ChartPie` | `src/components/ui/ChartPie.tsx` | Graphique camembert avec pourcentages dans chaque part |
+| `ChartBar` | `src/components/ui/ChartBar.tsx` | Graphique à barres horizontales avec valeurs à droite |
+
+### Props
+
+| Prop | Type | Requis | Description |
+|---|---|---|---|
+| `title` | string | **oui** | Titre du graphique (visible + `aria-label`) |
+| `insight` | string | **oui** | Texte court du badge insight (`INSIGHT – <texte>`) |
+| `insightPopinContent` | string | non | Texte long. Si présent, un bouton ⓘ ouvre une modale |
+| `datas` | array | **oui** | Tableau de `{ label: string, value: number }` |
+| `noMargin` | boolean | non | Supprime `my-8` sur le conteneur — utilisé par `TwoCharts` pour éviter les marges doubles |
+
+Pour `ChartBar`, les `value` sont affichées avec `%` — passer les valeurs numériques sans `%` (ex: `39` pour `39%`).
+
+### Usage 1 : Composant `TwoCharts` (recommandé — TinaCMS + PROD)
+
+Pour afficher deux graphiques côte à côte, utiliser le composant dédié `TwoCharts`. Ce composant est un template TinaCMS avec champs structurés (pas de rich-text imbriqué), ce qui garantit la compatibilité totale.
+
+```mdx
+<TwoCharts
+  leftType="chartPie"
+  leftTitle="Preferred payment methods - Luxury segment"
+  leftInsight="Premium cards dominate high-value purchases"
+  leftDatas={[{label: "Mobile Wallets", value: 7}, {label: "Credit Card", value: 39}]}
+  rightType="chartBar"
+  rightTitle="Payment trends by channel"
+  rightInsight="Online growing faster than in-store"
+  rightDatas={[{label: "Online", value: 54}, {label: "In-store", value: 46}]}
+/>
+```
+
+Le composant est enregistré dans `[...slug].astro` (PROD) et `PageContent.tsx` (DEV) — pas d'import nécessaire dans le MDX.
+
+> **Pourquoi pas TwoColumns ?** TinaCMS ne supporte pas les composants custom imbriqués dans les champs `rich-text` d'autres composants custom. `TwoCharts` résout ce problème avec des champs scalaires directement sur le template.
+
+### Usage 2 : Code block `json` dans un champ rich-text (DEV TinaCMS uniquement)
+
+Dans les champs `rich-text` TinaCMS (body de page, OneColumn, etc.), insérer un **code block** avec le langage `json` et un champ `"type"` pour identifier le chart. Le handler `code_block` dans `PageContent` interpole automatiquement le JSON.
+
+````md
+```json
+{
+  "type": "chartPie",
+  "title": "Répartition des paiements",
+  "insight": "Les cartes premium dominent les achats >1000€",
+  "datas": [
+    { "label": "Carte Premium", "value": 39 },
+    { "label": "Virement", "value": 34 },
+    { "label": "Mobile Wallet", "value": 27 }
+  ]
+}
+```
+````
+
+Le champ `"type"` vaut `"chartPie"` ou `"chartBar"`. Géré par `src/components/mdx/CodeBlock.tsx`.
+
+> **Limitation** : en build PROD (Astro MDX), les code blocks avec `{` à l'intérieur de fragments JSX (`{<>...</>}`) ne compilent pas. Cette approche est réservée aux champs rich-text au niveau supérieur (body de page).
+
+### SSR / Build statique
+
+`ChartPie` et `ChartBar` incluent un guard SSR (`typeof window === 'undefined'`). En build statique (Node.js), seule la partie accessible est rendue (titre + `figcaption sr-only` + badge insight). Le rendu visuel recharts s'active côté client en mode DEV.
+
+### Palette de couleurs
+
+Définie dans `src/components/mdx/chartColors.ts` — 10 couleurs harmonieuses attribuées par index cyclique.
+
+### Accessibilité
+
+- `<figure role="img" aria-label={title}>` sur chaque chart
+- `<figcaption className="sr-only">` avec légende textuelle complète (lecteurs d'écran)
+- Éléments visuels (labels SVG) marqués `aria-hidden="true"`
+- Badge insight : `<button aria-haspopup="dialog">` si popin disponible
+- Modale : `role="dialog"`, `aria-modal`, `aria-labelledby`, focus piégé sur le bouton fermer, fermeture avec Echap
 
 ---
 
