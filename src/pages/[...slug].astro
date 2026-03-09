@@ -1,20 +1,10 @@
 ---
-import { getCollection, render } from 'astro:content';
+import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
 import globalSeo from '../content/seo/global.json';
 
-// Composants Astro — chemin de build (zéro React)
-import CustomImageAstro from '../components/mdx/CustomImage.astro';
-import CTABlockAstro from '../components/mdx/CTABlock.astro';
-import QuoteAstro from '../components/mdx/Quote.astro';
-import SeparatorAstro from '../components/mdx/Separator.astro';
-import VideoEmbedAstro from '../components/mdx/VideoEmbed.astro';
-import GlobalCTABlockAstro from '../components/mdx/GlobalCTABlock.astro';
-// TwoColumns et OneColumn restent React (reçoivent du JSX en prop) mais gèrent les deux cas
-import TwoColumns from '../components/mdx/TwoColumns';
-import OneColumn from '../components/mdx/OneColumn';
-import TwoCharts from '../components/mdx/TwoCharts';
-
+// Composant React — rendu statique PROD (TinaMarkdown sans useTina)
+import StaticPageContent from '../components/StaticPageContent';
 // Composant React — chemin dev uniquement (useTina + preview temps réel)
 import PageContent from '../components/PageContent';
 
@@ -32,30 +22,23 @@ export async function getStaticPaths() {
 
 const { entry } = Astro.props;
 // entry.id = 'home.mdx', 'about.mdx', etc.
-const filename = entry.id.replace(/\.mdx$/, '');
 
 const title = entry.data.title;
 const description = entry.data.description || globalSeo.defaultDescription || '';
 const ogImage = globalSeo.defaultOgImage || '';
 
-// Build (astro build) : import.meta.env.PROD = true → rendu Astro, zéro React
-// Dev   (astro dev)   : import.meta.env.PROD = false → React + useTina
+// Build (astro build) : import.meta.env.PROD = true → StaticPageContent (TinaMarkdown, AST riche)
+// Dev   (astro dev)   : import.meta.env.PROD = false → PageContent + useTina (live preview)
 
-let Content: any = null;
 let tinaData: any = null;
 let tinaQuery = '';
 let tinaVariables: any = null;
 
-if (import.meta.env.PROD) {
-  const rendered = await render(entry);
-  Content = rendered.Content;
-} else {
-  const { client } = await import('../../tina/__generated__/client');
-  const pageResponse = await client.queries.page({ relativePath: entry.id });
-  tinaData = pageResponse.data;
-  tinaQuery = pageResponse.query;
-  tinaVariables = pageResponse.variables;
-}
+const { client } = await import('../../tina/__generated__/client');
+const pageResponse = await client.queries.page({ relativePath: entry.id });
+tinaData = pageResponse.data;
+tinaQuery = pageResponse.query;
+tinaVariables = pageResponse.variables;
 ---
 
 <Layout
@@ -67,21 +50,7 @@ if (import.meta.env.PROD) {
   twitterHandle={globalSeo.twitterHandle ?? ''}
 >
   {import.meta.env.PROD ? (
-    <main id="main-content" class="flow-root">
-      <Content
-        components={{
-          CustomImage: CustomImageAstro,
-          TwoColumns,
-          OneColumn,
-          TwoCharts,
-          CTABlock: CTABlockAstro,
-          Quote: QuoteAstro,
-          VideoEmbed: VideoEmbedAstro,
-          Separator: SeparatorAstro,
-          GlobalCTA: GlobalCTABlockAstro,
-        }}
-      />
-    </main>
+    <StaticPageContent body={tinaData.page.body} client:load />
   ) : (
     <PageContent data={tinaData} query={tinaQuery} variables={tinaVariables} client:load />
   )}

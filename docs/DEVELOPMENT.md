@@ -44,25 +44,26 @@ src/
 │   │   ├── Button.tsx       # Version React (dev / useTina)
 │   │   ├── Caption.astro    # Version Astro (build)
 │   │   └── Caption.tsx      # Version React (dev / useTina)
-│   ├── mdx/                 # Composants custom TinaCMS
-│   │   ├── CTABlock.astro   # Version Astro (build)
-│   │   ├── CTABlock.tsx     # Version React (dev / useTina)
+│   ├── mdx/                 # Composants custom TinaCMS (React uniquement)
+│   │   ├── CTABlock.astro   # Version Astro (build) — composants sans rich-text imbriqué
+│   │   ├── CTABlock.tsx     # Version React (build + dev)
 │   │   ├── CustomImage.astro# Version Astro avec srcset (build)
-│   │   ├── CustomImage.tsx  # Version React simple (dev / useTina)
+│   │   ├── CustomImage.tsx  # Version React (build via StaticPageContent + dev useTina)
 │   │   ├── GlobalCTABlock.astro # Version Astro (build) — lit le singleton via getEntry
-│   │   ├── GlobalCTABlock.tsx   # Version React (dev) — fetch GraphQL localhost:4001
+│   │   ├── GlobalCTABlock.tsx   # Version React (build + dev) — fetch GraphQL localhost:4001
+│   │   ├── OneColumn.tsx    # Version React (build + dev) — TinaMarkdown AST
 │   │   ├── Quote.astro      # Version Astro (build)
-│   │   ├── Quote.tsx        # Version React (dev / useTina)
+│   │   ├── Quote.tsx        # Version React (build + dev)
 │   │   ├── Separator.astro  # Version Astro (build)
-│   │   ├── Separator.tsx    # Version React (dev / useTina)
-│   │   ├── OneColumn.tsx    # React uniquement (reçoit du JSX en prop, gère les deux modes)
-│   │   ├── TwoColumns.tsx   # React uniquement (reçoit du JSX en prop, gère les deux modes)
+│   │   ├── Separator.tsx    # Version React (build + dev)
+│   │   ├── TwoColumns.tsx   # Version React (build + dev) — TinaMarkdown AST
 │   │   ├── VideoEmbed.astro # Version Astro (build)
-│   │   └── VideoEmbed.tsx   # Version React (dev / useTina)
+│   │   └── VideoEmbed.tsx   # Version React (build + dev)
 │   ├── ResponsiveImage.astro# Composant image responsive avec srcset (build)
 │   ├── Header.astro
 │   ├── Footer.astro
-│   └── PageContent.tsx      # Wrapper React avec useTina (dev uniquement)
+│   ├── PageContent.tsx      # Wrapper React avec useTina (dev uniquement — live preview)
+│   └── StaticPageContent.tsx# Wrapper React sans useTina (build PROD — TinaMarkdown direct)
 ├── config/
 │   └── images.ts            # IMAGE_BREAKPOINTS — tailles srcset générées au build
 ├── content/
@@ -89,16 +90,16 @@ tina/
 
 Le fichier `[...slug].astro` utilise deux chemins distincts selon le contexte :
 
-| Mode | Condition | Rendu | Images |
+| Mode | Condition | Composant | Rendu |
 |---|---|---|---|
-| **Build** (`astro build`) | `import.meta.env.PROD = true` | Astro content collections + composants `.astro` | srcset WebP, 8 tailles |
-| **Dev** (`tinacms dev -c "astro dev"`) | `import.meta.env.PROD = false` | React + `useTina` + composants `.tsx` | img simple |
+| **Build** (`pnpm build`) | `import.meta.env.PROD = true` | `StaticPageContent.tsx` | TinaMarkdown sans useTina — AST GraphQL TinaCMS |
+| **Dev** (`pnpm dev`) | `import.meta.env.PROD = false` | `PageContent.tsx` | React + `useTina` — live preview temps réel |
 
-Résultat : **quasiment zéro React dans le HTML de production**, preview temps réel conservé en édition locale.
+Les deux chemins utilisent le **client GraphQL TinaCMS** (`tina/__generated__/client.ts`) pour récupérer l'AST riche du contenu. Le serveur TinaCMS GraphQL est actif dans les deux cas (`pnpm build` = `tinacms dev -c "astro build"`).
 
-> **Exception : `TwoColumns` et `OneColumn`** — ces composants restent React dans les deux chemins (build et dev). Ils reçoivent du contenu riche (JSX) en prop depuis TinaMarkdown, ce qui est incompatible avec un composant `.astro`.
+`StaticPageContent` rend le body TinaMarkdown avec tous les composants MDX (`.tsx`) — **pas de composants `.astro`** pour le rendu de contenu en PROD. Les composants `.astro` restants (Quote, Separator, VideoEmbed, etc.) ne sont plus utilisés dans ce chemin.
 
-> **Note importante** : `tinacms dev` définit `NODE_ENV=development`, ce qui rend `import.meta.env.PROD` **toujours faux** pendant cette commande. C'est pourquoi `pnpm build` utilise directement `astro build`, pas `tinacms dev -c "astro build"`.
+> **`TwoColumns` et `OneColumn`** : une seule version `.tsx` pour les deux modes. Reçoivent le TinaMarkdown AST directement depuis le client GraphQL, rendu via `<TinaMarkdown>`. Les anciens `.astro` (qui parsaient markdown avec `marked`) ont été supprimés.
 
 ---
 
@@ -186,7 +187,8 @@ TinaCMS ne supporte pas nativement les balises HTML `<sup>` et `<sub>` dans son 
 Les images sont stockées dans `src/assets/images/` (pas `public/`). TinaCMS les référence comme `/images/nom.ext` dans les MDX.
 
 - **En dev** : un plugin Vite (`devImagesPlugin` dans `astro.config.mjs`) sert `src/assets/images/` à l'URL `/images/`, pour que `CustomImage.tsx` puisse y accéder.
-- **Au build** : `CustomImage.astro` génère des variantes **AVIF + WebP** via `getImage()` d'Astro. Le `<picture>` HTML choisit automatiquement AVIF si le navigateur le supporte, WebP sinon.
+- **Au build (StaticPageContent)** : `CustomImage.tsx` accède aux images via `/images/...`. Une intégration Astro (`copyImagesIntegration` dans `astro.config.mjs`) copie `src/assets/images/` → `dist/images/` après le build, rendant les images accessibles en PROD.
+- Les composants `.astro` (`CustomImage.astro`, etc.) ne sont plus utilisés dans le chemin de rendu PROD — `StaticPageContent` utilise exclusivement les versions `.tsx`.
 
 ### Configuration des breakpoints images (`src/config/images.ts`)
 
@@ -279,7 +281,7 @@ import Box from '@/components/ui/Box';
 ### Build local
 
 ```bash
-pnpm build   # = astro build
+pnpm build   # = tinacms dev -c "astro build" (serveur GraphQL requis pendant le build)
 ```
 
 Génère le site dans `dist/` avec images optimisées (srcset WebP, 8 tailles).
@@ -383,6 +385,12 @@ Le champ `"type"` vaut `"chartPie"` ou `"chartBar"`. Géré par `src/components/
 ### SSR / Build statique
 
 `ChartPie` et `ChartBar` incluent un guard SSR (`typeof window === 'undefined'`). En build statique (Node.js), seule la partie accessible est rendue (titre + `figcaption sr-only` + badge insight). Le rendu visuel recharts s'active côté client en mode DEV.
+
+### Tooltip partagé
+
+Le style du tooltip recharts est mutualisé dans `src/components/ui/chartTooltipProps.ts` (`sharedTooltipProps`). Les deux composants (`ChartPie`, `ChartBar`) l'importent via spread `{...sharedTooltipProps}` et peuvent surcharger `formatter` ou `labelStyle` individuellement.
+
+Format d'affichage : `Nom de la série : valeur%` (ex: `Credit Card : 39%`).
 
 ### Palette de couleurs
 

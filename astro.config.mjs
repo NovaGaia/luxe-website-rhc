@@ -3,7 +3,7 @@ import { defineConfig } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
 import react from '@astrojs/react';
 import mdx from '@astrojs/mdx';
-import { createReadStream, existsSync, statSync } from 'fs';
+import { createReadStream, cpSync, existsSync, statSync } from 'fs';
 import { join, extname, resolve } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -40,6 +40,24 @@ const devImagesPlugin = {
   },
 };
 
+/**
+ * Intégration Astro (build uniquement) : copie src/assets/images/ → dist/images/
+ * Permet à CustomImage.tsx (StaticPageContent, PROD) d'accéder aux images via /images/...
+ */
+const copyImagesIntegration = {
+  name: 'copy-images-to-dist',
+  hooks: {
+    /** @param {{ dir: URL }} params */
+    'astro:build:done': async ({ dir }) => {
+      const src = join(projectRoot, 'src', 'assets', 'images');
+      const dest = join(fileURLToPath(dir), 'images');
+      if (existsSync(src)) {
+        cpSync(src, dest, { recursive: true });
+      }
+    },
+  },
+};
+
 // https://astro.build/config
 export default defineConfig({
   site: 'https://novagaia.github.io',
@@ -52,5 +70,5 @@ export default defineConfig({
     plugins: [tailwindcss(), devImagesPlugin],
   },
 
-  integrations: [react(), mdx()],
+  integrations: [react(), mdx(), copyImagesIntegration],
 });

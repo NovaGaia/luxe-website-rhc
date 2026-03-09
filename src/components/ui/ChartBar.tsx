@@ -10,6 +10,7 @@ import {
 } from 'recharts';
 import Box from '../ui/Box';
 import { CHART_COLORS } from './chartColors';
+import { sharedTooltipProps } from './chartTooltipProps';
 import InsightPopin from '../mdx/InsightPopin';
 
 interface ChartData {
@@ -57,8 +58,9 @@ export default function ChartBar({ title, insight, insightPopinContent, datas, n
               axisLine={false}
             />
             <Tooltip
-              formatter={(value) => [typeof value === 'number' ? `${value}%` : '', '']}
-              cursor={{ fill: 'transparent' }}
+              {...sharedTooltipProps}
+              formatter={(value, _name, props) => [typeof value === 'number' ? `${value}%` : '', props.payload?.name ?? '']}
+              labelStyle={{ display: 'none' }}
             />
             <Bar dataKey="value" radius={[0, 4, 4, 0]} barSize={barHeight}>
               {chartData.map((_, index) => (

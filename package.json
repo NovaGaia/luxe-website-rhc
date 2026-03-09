@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "tinacms dev -c \"astro dev\"",
-    "build": "astro build",
+    "build": "tinacms dev -c \"astro build\"",
     "preview": "astro preview",
     "astro": "astro"
   },
@@ -25,7 +25,7 @@
     "@types/react": "^18.3.28",
     "@types/react-dom": "^18.3.7",
     "astro": "^5.17.1",
-    "react": "^18.3.1",
+"react": "^18.3.1",
     "react-dom": "^18.3.1",
     "recharts": "^3.8.0",
     "sharp": "^0.34.5",
